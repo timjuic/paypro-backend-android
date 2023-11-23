@@ -1,9 +1,13 @@
 package air.found.payproandroidbackend.core;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "card_brands", schema = "public", catalog = "air_db")
 public class CardBrands {
@@ -14,22 +18,6 @@ public class CardBrands {
     @Basic
     @Column(name = "name", nullable = true, length = 100)
     private String name;
-
-    public int getCardBrandId() {
-        return cardBrandId;
-    }
-
-    public void setCardBrandId(int cardBrandId) {
-        this.cardBrandId = cardBrandId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     public boolean equals(Object o) {

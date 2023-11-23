@@ -1,9 +1,13 @@
 package air.found.payproandroidbackend.core;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "user_merchants", schema = "public", catalog = "air_db")
 @IdClass(UserMerchantsPK.class)
@@ -20,22 +24,6 @@ public class UserMerchants {
     @JoinColumn(name = "merchant_merchant_id", referencedColumnName = "merchant_id", nullable = false)
     private Merchants merchantsByMerchantMerchantId;
 
-    public int getUserUserId() {
-        return userUserId;
-    }
-
-    public void setUserUserId(int userUserId) {
-        this.userUserId = userUserId;
-    }
-
-    public int getMerchantMerchantId() {
-        return merchantMerchantId;
-    }
-
-    public void setMerchantMerchantId(int merchantMerchantId) {
-        this.merchantMerchantId = merchantMerchantId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,10 +35,6 @@ public class UserMerchants {
     @Override
     public int hashCode() {
         return Objects.hash(userUserId, merchantMerchantId);
-    }
-
-    public Merchants getMerchantsByMerchantMerchantId() {
-        return merchantsByMerchantMerchantId;
     }
 
     public void setMerchantsByMerchantMerchantId(Merchants merchantsByMerchantMerchantId) {

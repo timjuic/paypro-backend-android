@@ -1,11 +1,15 @@
 package air.found.payproandroidbackend.core;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "user_accounts", schema = "public", catalog = "air_db")
 public class UserAccounts {
@@ -39,78 +43,6 @@ public class UserAccounts {
     private String lastName;
     @OneToMany(mappedBy = "userAccountsByUserUserId")
     private Collection<UserMerchants> userMerchantsByUserId;
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getConfirmed() {
-        return isConfirmed;
-    }
-
-    public void setConfirmed(Boolean confirmed) {
-        isConfirmed = confirmed;
-    }
-
-    public Boolean getAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(Boolean admin) {
-        isAdmin = admin;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getForgotPasswordCode() {
-        return forgotPasswordCode;
-    }
-
-    public void setForgotPasswordCode(String forgotPasswordCode) {
-        this.forgotPasswordCode = forgotPasswordCode;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -1,10 +1,14 @@
 package air.found.payproandroidbackend.core;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 public class Terminals {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,54 +37,6 @@ public class Terminals {
     @JoinColumn(name = "status_status_id", referencedColumnName = "status_id")
     private Statuses statusesByStatusStatusId;
 
-    public int getTerminalId() {
-        return terminalId;
-    }
-
-    public void setTerminalId(int terminalId) {
-        this.terminalId = terminalId;
-    }
-
-    public String getTerminalKey() {
-        return terminalKey;
-    }
-
-    public void setTerminalKey(String terminalKey) {
-        this.terminalKey = terminalKey;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Integer getMerchantMerchantId() {
-        return merchantMerchantId;
-    }
-
-    public void setMerchantMerchantId(Integer merchantMerchantId) {
-        this.merchantMerchantId = merchantMerchantId;
-    }
-
-    public Integer getStatusStatusId() {
-        return statusStatusId;
-    }
-
-    public void setStatusStatusId(Integer statusStatusId) {
-        this.statusStatusId = statusStatusId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,16 +50,8 @@ public class Terminals {
         return Objects.hash(terminalId, terminalKey, type, createdAt, merchantMerchantId, statusStatusId);
     }
 
-    public Merchants getMerchantsByMerchantMerchantId() {
-        return merchantsByMerchantMerchantId;
-    }
-
     public void setMerchantsByMerchantMerchantId(Merchants merchantsByMerchantMerchantId) {
         this.merchantsByMerchantMerchantId = merchantsByMerchantMerchantId;
-    }
-
-    public Statuses getStatusesByStatusStatusId() {
-        return statusesByStatusStatusId;
     }
 
     public void setStatusesByStatusStatusId(Statuses statusesByStatusStatusId) {

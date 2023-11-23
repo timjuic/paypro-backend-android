@@ -4,10 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+
+@Getter
+@Setter
 public class MerchantCardBrandsPK implements Serializable {
     @Column(name = "merchant_merchant_id", nullable = false)
     @Id
@@ -18,21 +23,6 @@ public class MerchantCardBrandsPK implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cardBrandCardBrandId;
 
-    public int getMerchantMerchantId() {
-        return merchantMerchantId;
-    }
-
-    public void setMerchantMerchantId(int merchantMerchantId) {
-        this.merchantMerchantId = merchantMerchantId;
-    }
-
-    public int getCardBrandCardBrandId() {
-        return cardBrandCardBrandId;
-    }
-
-    public void setCardBrandCardBrandId(int cardBrandCardBrandId) {
-        this.cardBrandCardBrandId = cardBrandCardBrandId;
-    }
 
     @Override
     public boolean equals(Object o) {

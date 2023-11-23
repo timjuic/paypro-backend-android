@@ -1,10 +1,14 @@
 package air.found.payproandroidbackend.core;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Collection;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 public class Statuses {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,22 +21,6 @@ public class Statuses {
     @OneToMany(mappedBy = "statusesByStatusStatusId")
     private Collection<Merchants> merchantsByStatusId;
 
-    public int getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
-    }
-
-    public String getStatusName() {
-        return statusName;
-    }
-
-    public void setStatusName(String statusName) {
-        this.statusName = statusName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,10 +32,6 @@ public class Statuses {
     @Override
     public int hashCode() {
         return Objects.hash(statusId, statusName);
-    }
-
-    public Collection<Merchants> getMerchantsByStatusId() {
-        return merchantsByStatusId;
     }
 
     public void setMerchantsByStatusId(Collection<Merchants> merchantsByStatusId) {

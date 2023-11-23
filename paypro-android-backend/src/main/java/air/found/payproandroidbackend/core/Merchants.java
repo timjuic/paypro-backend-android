@@ -1,11 +1,15 @@
 package air.found.payproandroidbackend.core;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 public class Merchants {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,78 +43,6 @@ public class Merchants {
     @OneToMany(mappedBy = "merchantsByMerchantMerchantId")
     private Collection<MerchantCardBrands> merchantCardBrandsByMerchantId;
 
-    public int getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(int merchantId) {
-        this.merchantId = merchantId;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getStreetName() {
-        return streetName;
-    }
-
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public int getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(int postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getStreetNumber() {
-        return streetNumber;
-    }
-
-    public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Integer getStatusStatusId() {
-        return statusStatusId;
-    }
-
-    public void setStatusStatusId(Integer statusStatusId) {
-        this.statusStatusId = statusStatusId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,10 +54,6 @@ public class Merchants {
     @Override
     public int hashCode() {
         return Objects.hash(merchantId, fullName, status, streetName, cityName, postalCode, streetNumber, createdAt, statusStatusId);
-    }
-
-    public Collection<MerchantCardBrands> getMerchantCardBrandsByMerchantId() {
-        return merchantCardBrandsByMerchantId;
     }
 
     public void setMerchantCardBrandsByMerchantId(Collection<MerchantCardBrands> merchantCardBrandsByMerchantId) {
