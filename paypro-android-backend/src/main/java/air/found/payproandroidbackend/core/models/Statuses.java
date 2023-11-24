@@ -1,4 +1,4 @@
-package air.found.payproandroidbackend.core;
+package air.found.payproandroidbackend.core.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
