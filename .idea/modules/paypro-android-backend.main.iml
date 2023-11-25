@@ -1,21 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
   <component name="AdditionalModuleElements">
-    <content url="file://$MODULE_DIR$/../../paypro-android-backend/build/generated/sources/annotationProcessor/java/main" dumb="true">
+    <content url="file://$MODULE_DIR$/../../paypro-android-backend/build/generated/sources/annotationProcessor/java/main">
       <sourceFolder url="file://$MODULE_DIR$/../../paypro-android-backend/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
     </content>
-  </component>
-  <component name="FacetManager">
-    <facet type="jpa" name="JPA">
-      <configuration>
-        <setting name="validation-enabled" value="true" />
-        <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping>
-          <factory-entry name="entityManagerFactory" value="f6c22b79-bcbc-4d27-b997-945664491fd8" />
-          <factory-entry name="paypro-android-backend.main" value="4e75fd79-c515-4292-af35-18b850dc244c" />
-        </datasource-mapping>
-        <naming-strategy-map />
-      </configuration>
-    </facet>
   </component>
 </module>
