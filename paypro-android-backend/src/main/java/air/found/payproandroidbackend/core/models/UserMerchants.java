@@ -1,4 +1,4 @@
-package air.found.payproandroidbackend.core;
+package air.found.payproandroidbackend.core.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,6 +23,9 @@ public class UserMerchants {
     @ManyToOne
     @JoinColumn(name = "merchant_merchant_id", referencedColumnName = "merchant_id", nullable = false)
     private Merchants merchantsByMerchantMerchantId;
+    @ManyToOne
+    @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false)
+    private UserAccounts userAccounts;
 
     @Override
     public boolean equals(Object o) {

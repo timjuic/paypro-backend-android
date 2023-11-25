@@ -1,4 +1,4 @@
-package air.found.payproandroidbackend.core;
+package air.found.payproandroidbackend.core.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class Statuses {
     @Basic
     @Column(name = "status_name", nullable = true, length = 20)
     private String statusName;
-    @OneToMany(mappedBy = "statusesByStatusStatusId")
+    @OneToMany(mappedBy = "statusEntity")
     private Collection<Merchants> merchantsByStatusId;
 
     @Override

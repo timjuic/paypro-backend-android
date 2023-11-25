@@ -1,4 +1,4 @@
-package air.found.payproandroidbackend.core;
+package air.found.payproandroidbackend.core.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public class UserAccounts {
     @Basic
     @Column(name = "last_name", nullable = false, length = 20)
     private String lastName;
-    @OneToMany(mappedBy = "userAccountsByUserUserId")
+    @OneToMany(mappedBy = "userAccounts")
     private Collection<UserMerchants> userMerchantsByUserId;
 
     @Override
