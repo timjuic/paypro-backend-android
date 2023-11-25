@@ -28,8 +28,8 @@ public class ResponseBody<T> {
         return new ResponseBody<T>(true, message, null, null).setData(data);
     }
 
-    public static ResponseBody<?> error(String message, Integer errorCode, String errorMessage) {
-        return new ResponseBody<>(false, message, errorCode, errorMessage);
+    public static <T> ResponseBody<T> error(String message, Integer errorCode, String errorMessage) {
+        return new ResponseBody<T>(false, message, errorCode, errorMessage);
     }
 
     public T getData() {

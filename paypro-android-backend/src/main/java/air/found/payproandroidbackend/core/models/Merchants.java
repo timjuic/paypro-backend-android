@@ -19,9 +19,9 @@ public class Merchants {
     @Basic
     @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
-    @Basic
-    @Column(name = "status", nullable = true)
-    private Integer status;
+    @ManyToOne
+    @JoinColumn(name = "status_status_id", referencedColumnName = "status_id", insertable = false, updatable = false)
+    private Statuses statusEntity;
     @Basic
     @Column(name = "street_name", nullable = false, length = 255)
     private String streetName;
@@ -40,7 +40,7 @@ public class Merchants {
     @Basic
     @Column(name = "status_status_id", nullable = true)
     private Integer statusStatusId;
-    @OneToMany(mappedBy = "merchantsByMerchantMerchantId")
+    @OneToMany(mappedBy = "merchants")
     private Collection<MerchantCardBrands> merchantCardBrandsByMerchantId;
 
     @Override
@@ -48,12 +48,12 @@ public class Merchants {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Merchants merchants = (Merchants) o;
-        return merchantId == merchants.merchantId && postalCode == merchants.postalCode && Objects.equals(fullName, merchants.fullName) && Objects.equals(status, merchants.status) && Objects.equals(streetName, merchants.streetName) && Objects.equals(cityName, merchants.cityName) && Objects.equals(streetNumber, merchants.streetNumber) && Objects.equals(createdAt, merchants.createdAt) && Objects.equals(statusStatusId, merchants.statusStatusId);
+        return merchantId == merchants.merchantId && postalCode == merchants.postalCode && Objects.equals(fullName, merchants.fullName) && Objects.equals(statusEntity, merchants.statusEntity) && Objects.equals(streetName, merchants.streetName) && Objects.equals(cityName, merchants.cityName) && Objects.equals(streetNumber, merchants.streetNumber) && Objects.equals(createdAt, merchants.createdAt) && Objects.equals(statusStatusId, merchants.statusStatusId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(merchantId, fullName, status, streetName, cityName, postalCode, streetNumber, createdAt, statusStatusId);
+        return Objects.hash(merchantId, fullName, statusEntity, streetName, cityName, postalCode, streetNumber, createdAt, statusStatusId);
     }
 
     public void setMerchantCardBrandsByMerchantId(Collection<MerchantCardBrands> merchantCardBrandsByMerchantId) {

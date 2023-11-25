@@ -18,7 +18,7 @@ public class Statuses {
     @Basic
     @Column(name = "status_name", nullable = true, length = 20)
     private String statusName;
-    @OneToMany(mappedBy = "statusesByStatusStatusId")
+    @OneToMany(mappedBy = "statusEntity")
     private Collection<Merchants> merchantsByStatusId;
 
     @Override
