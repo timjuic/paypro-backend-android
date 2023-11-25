@@ -2,16 +2,12 @@ package air.found.payproandroidbackend.endpoints.controllers;
 
 
 import air.found.payproandroidbackend.business_logic.MerchantService;
-import air.found.payproandroidbackend.core.models.Merchants;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import air.found.payproandroidbackend.core.network.ResponseBody;
-
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/merchant")
