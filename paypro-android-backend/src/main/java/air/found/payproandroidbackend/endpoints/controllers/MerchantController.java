@@ -33,4 +33,11 @@ public class MerchantController {
             return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, "Merchant not found", 1, "ERR_MERCHANT_NOT_FOUND");
         }
     }
+
+    @PostMapping("")
+    public ResponseEntity<Merchants> addMerchant(@RequestBody Merchants merchant) {
+        Merchants savedMerchant = merchantService.addMerchant(merchant);
+
+        return ResponseEntity.ok(savedMerchant);
+    }
 }
