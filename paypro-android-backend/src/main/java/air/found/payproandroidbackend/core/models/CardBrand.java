@@ -20,7 +20,4 @@ public class CardBrand {
 
     @Column(name = "name", length = 100)
     private String name;
-
-    @OneToMany(mappedBy = "cardBrand")
-    private Set<MerchantCardBrand> merchantCardBrand;
 }

@@ -20,12 +20,6 @@ public class Status {
     @Column(name = "status_name", length = 20)
     private String statusName;
 
-    @OneToMany(mappedBy = "status")
-    private Set<Merchant> merchants;
-
-    @OneToMany(mappedBy = "status")
-    private Set<Terminal> terminals;
-
     public void setStatusType(StatusType statusType) {
         if (statusType != null) {
             this.statusId = statusType.getId();
