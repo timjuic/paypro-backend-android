@@ -1,5 +1,6 @@
 package air.found.payproandroidbackend.core.models;
 
+import air.found.payproandroidbackend.core.enums.StatusType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,11 @@ public class Status {
 
     @OneToMany(mappedBy = "status")
     private Set<Terminal> terminals;
+
+    public void setStatusType(StatusType statusType) {
+        if (statusType != null) {
+            this.statusId = statusType.getId();
+            this.statusName = statusType.getName();
+        }
+    }
 }

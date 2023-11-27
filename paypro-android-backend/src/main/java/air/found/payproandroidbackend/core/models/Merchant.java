@@ -24,17 +24,8 @@ public class Merchant {
     @JoinColumn(name = "status_status_id", referencedColumnName = "status_id")
     private Status status;
 
-    @Column(name = "street_name", nullable = false, length = 255)
-    private String streetName;
-
-    @Column(name = "city_name", nullable = false, length = 100)
-    private String cityName;
-
-    @Column(name = "postal_code", nullable = false)
-    private Integer postalCode;
-
-    @Column(name = "street_number", nullable = false, length = 15)
-    private String streetNumber;
+    @Embedded
+    private Address address;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -51,5 +42,29 @@ public class Merchant {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+    }
+
+    public void setAddressDetails(String streetName, String cityName, Integer postalCode, String streetNumber) {
+        this.address.setStreetName(streetName);
+        this.address.setCityName(cityName);
+        this.address.setPostalCode(postalCode);
+        this.address.setStreetNumber(streetNumber);
+    }
+
+    @Embeddable
+    @Data
+    @NoArgsConstructor
+    class Address {
+        @Column(name = "street_name", nullable = false, length = 255)
+        private String streetName;
+
+        @Column(name = "city_name", nullable = false, length = 100)
+        private String cityName;
+
+        @Column(name = "postal_code", nullable = false)
+        private Integer postalCode;
+
+        @Column(name = "street_number", nullable = false, length = 15)
+        private String streetNumber;
     }
 }
