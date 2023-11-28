@@ -2,12 +2,15 @@ package air.found.payproandroidbackend.endpoints.controllers;
 
 
 import air.found.payproandroidbackend.business_logic.MerchantService;
+import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import air.found.payproandroidbackend.core.network.ResponseBody;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/merchant")
@@ -17,6 +20,17 @@ public class MerchantController {
     @Autowired
     public MerchantController(MerchantService merchantService) {
         this.merchantService = merchantService;
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponseBody<List<Merchant>>> getMerchantsByUserAccount(@PathVariable("userId") Long userId) {
+        List<Merchant> merchants = merchantService.getMerchantsByUser(userId);
+
+        if (merchants.isEmpty()) {
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, "No merchants found for the user", 2, "ERR_NO_MERCHANTS_FOUND");
+        } else {
+            return ApiResponseBuilder.buildSuccessResponse(merchants, "Merchants successfully retrieved");
+        }
     }
 
     @DeleteMapping("/{id}")
