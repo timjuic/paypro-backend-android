@@ -52,6 +52,11 @@ public class Merchant {
     )
     private Set<UserAccount> userAccounts;
 
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+    }
+
     @Embeddable
     @Data
     @NoArgsConstructor

@@ -35,7 +35,7 @@ public class Terminal {
     private Status status;
 
     @PrePersist
-    protected void onCreate() {
+    public void prePersist() {
         createdAt = LocalDateTime.now();
     }
 }

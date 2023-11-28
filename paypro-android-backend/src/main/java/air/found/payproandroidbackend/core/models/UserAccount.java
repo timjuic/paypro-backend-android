@@ -50,7 +50,7 @@ public class UserAccount {
     private Set<Merchant> merchants;
 
     @PrePersist
-    protected void onCreate() {
+    public void prePersist() {
         createdAt = LocalDateTime.now();
     }
 }
