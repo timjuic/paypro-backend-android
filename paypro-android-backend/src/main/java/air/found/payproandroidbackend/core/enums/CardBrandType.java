@@ -7,7 +7,7 @@ public enum CardBrandType {
     DINERS(1, "Diners"),
     MASTERCARD(2, "MasterCard"),
     VISA(3, "VISA"),
-    Discover(4, "Discover"),
+    DISCOVER(4, "Discover"),
     MAESTRO(5, "Maestro");
 
     private final int id;
