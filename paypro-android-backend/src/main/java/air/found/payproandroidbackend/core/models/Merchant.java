@@ -37,6 +37,21 @@ public class Merchant {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private Status status;
+
+    @OneToMany(mappedBy = "merchant")
+    private List<Terminal> terminals;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_merchants",
+            joinColumns = @JoinColumn(name = "merchant_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserAccount> userAccounts;
+
     @Embeddable
     @Data
     @NoArgsConstructor

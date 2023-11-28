@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,10 +21,9 @@ public class Status {
     @Column(name = "status_name", length = 20)
     private String statusName;
 
-    public void setStatusType(StatusType statusType) {
-        if (statusType != null) {
-            this.statusId = statusType.getId();
-            this.statusName = statusType.getName();
-        }
-    }
+    @OneToMany(mappedBy = "status")
+    private List<Merchant> merchants;
+
+    @OneToMany(mappedBy = "status")
+    private List<Terminal> terminals;
 }

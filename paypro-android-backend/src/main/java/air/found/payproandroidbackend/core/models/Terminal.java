@@ -27,11 +27,11 @@ public class Terminal {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "merchant_merchant_id", referencedColumnName = "merchant_id")
+    @JoinColumn(name = "merchant_id")
     private Merchant merchant;
 
     @ManyToOne
-    @JoinColumn(name = "status_status_id", referencedColumnName = "status_id")
+    @JoinColumn(name = "status_id")
     private Status status;
 
     @PrePersist
