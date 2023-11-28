@@ -1,55 +1,76 @@
 package air.found.payproandroidbackend.core.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "merchants")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Merchant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "merchant_id")
-    private Integer merchantId;
+    private Integer id;
 
     @Column(name = "full_name", nullable = false, length = 100)
-    private String fullName;
+    private String merchantName;
 
-    @ManyToOne
-    @JoinColumn(name = "status_status_id", referencedColumnName = "status_id")
-    private Status status;
+    @Embedded
+    private Address address;
 
-    @Column(name = "street_name", nullable = false, length = 255)
-    private String streetName;
-
-    @Column(name = "city_name", nullable = false, length = 100)
-    private String cityName;
-
-    @Column(name = "postal_code", nullable = false)
-    private Integer postalCode;
-
-    @Column(name = "street_number", nullable = false, length = 15)
-    private String streetNumber;
+    @ManyToMany
+    @JoinTable(
+            name = "merchant_card_brands",
+            joinColumns = @JoinColumn(name = "merchant_id"),
+            inverseJoinColumns = @JoinColumn(name = "card_brand_id")
+    )
+    private Set<CardBrand> acceptedCards;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "merchant")
-    private Set<MerchantCardBrand> merchantCardBrands;
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private Status status;
 
     @OneToMany(mappedBy = "merchant")
-    private Set<Terminal> terminals;
+    private List<Terminal> terminals;
 
-    @OneToMany(mappedBy = "merchant")
-    private Set<UserMerchant> userMerchants;
+    @ManyToMany
+    @JoinTable(
+            name = "user_merchants",
+            joinColumns = @JoinColumn(name = "merchant_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserAccount> userAccounts;
 
     @PrePersist
-    protected void onCreate() {
+    public void prePersist() {
         createdAt = LocalDateTime.now();
+    }
+
+    @Embeddable
+    @Data
+    @NoArgsConstructor
+    static class Address {
+        @Column(name = "street_name", nullable = false)
+        private String streetName;
+
+        @Column(name = "city_name", nullable = false, length = 100)
+        private String city;
+
+        @Column(name = "street_number", nullable = false, length = 15)
+        private String streetNumber;
+
+        @Column(name = "postal_code", nullable = false)
+        private Integer postalCode;
     }
 }

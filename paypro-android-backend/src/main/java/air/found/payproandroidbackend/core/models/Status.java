@@ -1,9 +1,11 @@
 package air.found.payproandroidbackend.core.models;
 
+import air.found.payproandroidbackend.core.enums.StatusType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,8 +22,8 @@ public class Status {
     private String statusName;
 
     @OneToMany(mappedBy = "status")
-    private Set<Merchant> merchants;
+    private List<Merchant> merchants;
 
     @OneToMany(mappedBy = "status")
-    private Set<Terminal> terminals;
+    private List<Terminal> terminals;
 }
