@@ -2,6 +2,7 @@ package air.found.payproandroidbackend.endpoints.controllers;
 
 
 import air.found.payproandroidbackend.business_logic.MerchantService;
+import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,9 +32,8 @@ public class MerchantController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Merchants> addMerchant(@RequestBody Merchants merchant) {
-        Merchants savedMerchant = merchantService.addMerchant(merchant);
+    public ResponseEntity<Merchant> addMerchant(@RequestBody Merchant merchant) {
 
-        return ResponseEntity.ok(savedMerchant);
+        return ResponseEntity.ok(merchant);
     }
 }
