@@ -41,11 +41,16 @@ public class UserAccount {
     @Column(name = "last_name", nullable = false, length = 20)
     private String lastName;
 
-    @OneToMany(mappedBy = "userAccount")
-    private Set<UserMerchant> userMerchants;
+    @ManyToMany
+    @JoinTable(
+            name = "user_merchants",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "merchant_id")
+    )
+    private Set<Merchant> merchants;
 
     @PrePersist
-    protected void onCreate() {
+    public void prePersist() {
         createdAt = LocalDateTime.now();
     }
 }
