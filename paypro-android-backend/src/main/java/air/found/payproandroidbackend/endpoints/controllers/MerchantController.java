@@ -32,8 +32,13 @@ public class MerchantController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Merchant> addMerchant(@RequestBody Merchant merchant) {
+    public ResponseEntity<ResponseBody<Merchant>> addMerchant(@RequestBody Merchant merchant) {
+        boolean result = merchantService.saveMerchant(merchant);
 
-        return ResponseEntity.ok(merchant);
+        if (result) {
+            return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully added!");
+        } else {
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, "Merchant not added", 1, "ERR_MERCHANT_NOT_ADDED");
+        }
     }
 }
