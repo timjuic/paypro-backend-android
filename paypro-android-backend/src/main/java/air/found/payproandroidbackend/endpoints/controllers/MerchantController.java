@@ -43,4 +43,15 @@ public class MerchantController {
             return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, "Merchant not found", 1, "ERR_MERCHANT_NOT_FOUND");
         }
     }
+
+    @PostMapping("")
+    public ResponseEntity<ResponseBody<Merchant>> addMerchant(@RequestBody Merchant merchant) {
+        boolean result = merchantService.saveMerchant(merchant);
+
+        if (result) {
+            return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully added!");
+        } else {
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, "Merchant not added", 1, "ERR_MERCHANT_NOT_ADDED");
+        }
+    }
 }

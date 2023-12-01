@@ -32,14 +32,14 @@ public class Merchant {
             joinColumns = @JoinColumn(name = "merchant_id"),
             inverseJoinColumns = @JoinColumn(name = "card_brand_id")
     )
-    private Set<CardBrand> acceptedCards;
+    private Set<CardBrand> acceptedCardsEnum;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
-    private Status status;
+    private Status statusEnum;
 
     @OneToMany(mappedBy = "merchant")
     private List<Terminal> terminals;
@@ -51,6 +51,12 @@ public class Merchant {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<UserAccount> userAccounts;
+
+    @Transient
+    private List<Integer> acceptedCards;
+
+    @Transient
+    private Integer status;
 
     @PrePersist
     public void prePersist() {
