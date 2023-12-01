@@ -2,6 +2,7 @@ package air.found.payproandroidbackend.endpoints.controllers;
 
 
 import air.found.payproandroidbackend.business_logic.MerchantService;
+import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,17 @@ public class MerchantController {
             return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully deleted!");
         } else {
             return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, "Merchant not found", 1, "ERR_MERCHANT_NOT_FOUND");
+        }
+    }
+
+    @PostMapping("")
+    public ResponseEntity<ResponseBody<Merchant>> addMerchant(@RequestBody Merchant merchant) {
+        boolean result = merchantService.saveMerchant(merchant);
+
+        if (result) {
+            return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully added!");
+        } else {
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, "Merchant not added", 1, "ERR_MERCHANT_NOT_ADDED");
         }
     }
 }
