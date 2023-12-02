@@ -46,5 +46,4 @@ public class TerminalRepository extends DBRepository {
             return false;
         }
     }
-
 }

@@ -1,6 +1,8 @@
 package air.found.payproandroidbackend.endpoints.controllers;
 
 import air.found.payproandroidbackend.business_logic.TerminalService;
+import air.found.payproandroidbackend.core.ApiError;
+import air.found.payproandroidbackend.core.ServiceResult;
 import air.found.payproandroidbackend.core.models.Terminal;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import air.found.payproandroidbackend.core.network.ResponseBody;
@@ -24,12 +26,13 @@ public class TerminalController {
     @PostMapping("")
     public ResponseEntity<ResponseBody<Object>> addTerminal(@PathVariable("mid") Integer merchantId, @RequestBody Terminal terminal) {
 
-        Boolean successfullyAdded = terminalService.addTerminalToMerchant(merchantId, terminal);
+        ServiceResult serviceResult = terminalService.addTerminalToMerchant(merchantId, terminal);
 
-        if (!successfullyAdded) {
-            return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, "Adding terminal has failed. Please check the request body", 2, "ERR_");
+        if (!serviceResult.isSuccess()) {
+            ApiError apiError = serviceResult.getApiError();
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
         } else {
-            return ApiResponseBuilder.buildSuccessResponse(true, "Terminal successfully added");
+            return ApiResponseBuilder.buildSuccessResponse(null, "Terminal successfully added");
         }
     }
 }
