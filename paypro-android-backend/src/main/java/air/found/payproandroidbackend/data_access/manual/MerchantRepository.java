@@ -30,7 +30,6 @@ public class MerchantRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle exceptions as needed
         } catch (RuntimeException e) {
             throw e;
         }
@@ -54,7 +53,6 @@ public class MerchantRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle exceptions as needed
         } catch (RuntimeException e) {
             throw e;
         }

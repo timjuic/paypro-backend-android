@@ -6,7 +6,6 @@ import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.models.Terminal;
 import air.found.payproandroidbackend.data_access.persistence.MerchantRepository;
 import air.found.payproandroidbackend.data_access.persistence.TerminalRepository;
-import air.found.payproandroidbackend.endpoints.controllers.TerminalController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
