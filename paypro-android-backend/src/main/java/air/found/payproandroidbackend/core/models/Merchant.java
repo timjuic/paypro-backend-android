@@ -66,7 +66,7 @@ public class Merchant {
     @Embeddable
     @Data
     @NoArgsConstructor
-    static class Address {
+    public static class Address {
         @Column(name = "street_name", nullable = false)
         private String streetName;
 
