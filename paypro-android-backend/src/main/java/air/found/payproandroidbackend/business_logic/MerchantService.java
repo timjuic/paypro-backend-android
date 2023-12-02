@@ -5,17 +5,13 @@ import air.found.payproandroidbackend.core.enums.StatusType;
 import air.found.payproandroidbackend.core.models.CardBrand;
 import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.models.Status;
-import air.found.payproandroidbackend.data_access.CardBrandRepository;
-import air.found.payproandroidbackend.data_access.MerchantRepository;
-import air.found.payproandroidbackend.data_access.StatusRepository;
+import air.found.payproandroidbackend.data_access.persistence.CardBrandRepository;
+import air.found.payproandroidbackend.data_access.persistence.MerchantRepository;
+import air.found.payproandroidbackend.data_access.persistence.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class MerchantService {
@@ -26,6 +22,10 @@ public class MerchantService {
     @Autowired
     public MerchantService(MerchantRepository merchantsRepository) {
         this.merchantsRepository = merchantsRepository;
+    }
+
+    public List<Merchant> getMerchantsByUser(Integer userId) {
+        return air.found.payproandroidbackend.data_access.manual.MerchantRepository.getMerchantsByUser(userId);
     }
 
     public boolean deleteMerchantById(Integer merchantId) {

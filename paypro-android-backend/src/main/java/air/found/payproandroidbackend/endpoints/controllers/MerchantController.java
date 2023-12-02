@@ -23,7 +23,7 @@ public class MerchantController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<ResponseBody<List<Merchant>>> getMerchantsByUserAccount(@PathVariable("userId") Long userId) {
+    public ResponseEntity<ResponseBody<List<Merchant>>> getMerchantsByUserAccount(@PathVariable("userId") Integer userId) {
         List<Merchant> merchants = merchantService.getMerchantsByUser(userId);
 
         if (merchants.isEmpty()) {
