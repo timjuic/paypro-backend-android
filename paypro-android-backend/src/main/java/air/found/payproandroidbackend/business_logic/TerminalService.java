@@ -9,6 +9,7 @@ import air.found.payproandroidbackend.data_access.persistence.TerminalRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,26 +22,38 @@ public class TerminalService {
         this.merchantRepository = merchantRepository;
     }
 
-    public ServiceResult addTerminalToMerchant(Integer merchantId, Terminal terminal) {
+    public ServiceResult<Boolean> addTerminalToMerchant(Integer merchantId, Terminal terminal) {
         if (!isValidTerminalKey(terminal.getTerminalKey())) {
-            return new ServiceResult(false, ApiError.ERR_INVALID_TERMINAL_KEY);
+            return ServiceResult.failure(ApiError.ERR_INVALID_TERMINAL_KEY);
         }
 
         if (terminalRepository.existsByTerminalKey(terminal.getTerminalKey())) {
-            return new ServiceResult(false, ApiError.ERR_TERMINAL_ALREADY_EXISTS);
+            return ServiceResult.failure(ApiError.ERR_TERMINAL_ALREADY_EXISTS);
         }
 
         Optional<Merchant> optionalMerchant = merchantRepository.findById(merchantId);
 
-        if (!optionalMerchant.isPresent()) {
-            return new ServiceResult(false, ApiError.ERR_MERCHANT_NOT_FOUND);
+        if (optionalMerchant.isEmpty()) {
+            return ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND);
         }
 
         Merchant merchant = optionalMerchant.get();
         terminal.setMerchant(merchant);
         terminalRepository.save(terminal);
 
-        return new ServiceResult(true, null);
+        return ServiceResult.success();
+    }
+
+
+    public ServiceResult<List<Terminal>> getTerminalsForMerchant(Integer merchantId) {
+        Optional<Merchant> optionalMerchant = merchantRepository.findById(merchantId);
+
+        if (optionalMerchant.isEmpty()) {
+            return ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND);
+        }
+
+        List<Terminal> terminals = air.found.payproandroidbackend.data_access.manual.TerminalRepository.findByMerchantId(merchantId);
+        return ServiceResult.success(terminals);
     }
 
     private boolean isValidTerminalKey(String terminalKey) {
