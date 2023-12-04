@@ -2,6 +2,8 @@ package air.found.payproandroidbackend.endpoints.controllers;
 
 
 import air.found.payproandroidbackend.business_logic.MerchantService;
+import air.found.payproandroidbackend.core.ApiError;
+import air.found.payproandroidbackend.core.ServiceResult;
 import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +58,14 @@ public class MerchantController {
     }
 
     @PutMapping("/{id}")
-    public <T> ResponseEntity<ResponseBody<T>> updateMerchant(@PathVariable Integer id, @RequestBody Merchant merchant) {
-        boolean result = merchantService.updateMerchant(id, merchant);
+    public ResponseEntity<ResponseBody<Object>> updateMerchant(@PathVariable Integer id, @RequestBody Merchant merchant) {
+        ServiceResult<Boolean> result = merchantService.updateMerchant(id, merchant);
 
-        if (result) {
+        if (result.isSuccess()) {
             return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully updated!");
         } else {
-            return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, "Merchant not updated", 1, "ERR_MERCHANT_NOT_UPDATED");
+            ApiError apiError = result.getApiError();
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
         }
     }
 }
