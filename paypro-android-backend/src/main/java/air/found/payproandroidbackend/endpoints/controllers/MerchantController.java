@@ -54,4 +54,15 @@ public class MerchantController {
             return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, "Merchant not added", 1, "ERR_MERCHANT_NOT_ADDED");
         }
     }
+
+    @PutMapping("/{id}")
+    public <T> ResponseEntity<ResponseBody<T>> updateMerchant(@PathVariable Integer id, @RequestBody Merchant merchant) {
+        boolean result = merchantService.updateMerchant(id, merchant);
+
+        if (result) {
+            return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully updated!");
+        } else {
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, "Merchant not updated", 1, "ERR_MERCHANT_NOT_UPDATED");
+        }
+    }
 }

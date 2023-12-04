@@ -70,6 +70,39 @@ public class MerchantService {
         }
     }
 
+    public boolean updateMerchant(Integer id, Merchant merchant) {
+        try {
+            if(merchant.getAcceptedCards() != null) {
+                Set<CardBrand> cardBrands = new HashSet<>();
+
+                for(Integer cardId : merchant.getAcceptedCards()) {
+                    CardBrandType cardBrandType = getCardBrandTypeById(cardId);
+                    if(cardBrandType != null) {
+                        CardBrand cardBrand = new CardBrand(cardId, cardBrandType.getName());
+                        cardBrands.add(cardBrand);
+                    }
+                }
+
+                merchant.setAcceptedCardsEnum(cardBrands);
+            }
+
+            if(merchant.getStatus() != null) {
+                StatusType statusType = getStatusTypeById(merchant.getStatus());
+                if(statusType != null) {
+                    Status status = new Status(statusType.getId(), statusType.getName());
+                    merchant.setStatusEnum(status);
+                }
+            }
+
+            merchant.setId(id);
+            merchantsRepository.save(merchant);
+
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
     private StatusType getStatusTypeById(Integer id) {
         for(StatusType type : StatusType.values()) {
             if(type.getId() == id) {
