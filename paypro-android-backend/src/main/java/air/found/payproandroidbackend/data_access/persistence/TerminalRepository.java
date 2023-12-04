@@ -9,4 +9,6 @@ public interface TerminalRepository extends JpaRepository<Terminal, Integer> {
     boolean existsByTerminalKey(String terminalKey);
 
     List<Terminal> findByMerchantId(Integer merchantId);
+
+
 }
