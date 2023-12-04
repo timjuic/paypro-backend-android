@@ -16,8 +16,6 @@ import java.util.*;
 @Service
 public class MerchantService {
     private final MerchantRepository merchantsRepository;
-    private CardBrandRepository cardBrandRepository;
-    private StatusRepository statusRepository;
 
     @Autowired
     public MerchantService(MerchantRepository merchantsRepository) {
