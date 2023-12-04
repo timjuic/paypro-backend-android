@@ -1,5 +1,7 @@
 package air.found.payproandroidbackend.business_logic;
 
+import air.found.payproandroidbackend.core.ApiError;
+import air.found.payproandroidbackend.core.ServiceResult;
 import air.found.payproandroidbackend.core.enums.CardBrandType;
 import air.found.payproandroidbackend.core.enums.StatusType;
 import air.found.payproandroidbackend.core.models.CardBrand;
@@ -69,6 +71,18 @@ public class MerchantService {
             return false;
         }
     }
+
+    public ServiceResult<Set<CardBrand>> getAcceptedCardBrands(Integer merchantId) {
+        Optional<Merchant> merchantOptional = merchantsRepository.findById(merchantId);
+
+        if (merchantOptional.isEmpty()) {
+            return ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND);
+        }
+
+        Merchant merchant = merchantOptional.get();
+        return ServiceResult.success(merchant.getAcceptedCardsEnum());
+    }
+
 
     private StatusType getStatusTypeById(Integer id) {
         for(StatusType type : StatusType.values()) {
