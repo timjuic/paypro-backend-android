@@ -1,6 +1,8 @@
 package air.found.payproandroidbackend.endpoints.controllers;
 
 import air.found.payproandroidbackend.business_logic.UserService;
+import air.found.payproandroidbackend.core.ApiError;
+import air.found.payproandroidbackend.core.ServiceResult;
 import air.found.payproandroidbackend.core.models.UserAccount;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import air.found.payproandroidbackend.core.network.ResponseBody;
@@ -23,12 +25,13 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ResponseBody<Object>> registration(@RequestBody UserAccount userAccount) {
-        boolean result = userService.registerUser(userAccount);
+        ServiceResult<Boolean> result = userService.registerUser(userAccount);
 
-        if (result) {
+        if (result.isSuccess()) {
             return ApiResponseBuilder.buildSuccessResponse(null, "You have been successfully registered!");
-        } else {
-            return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, "Merchant not added", 1, "ERR_MERCHANT_NOT_ADDED");
         }
+
+        ApiError apiError = result.getApiError();
+        return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
     }
 }
