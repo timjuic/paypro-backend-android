@@ -1,14 +1,14 @@
-package air.found.payproandroidbackend.controllers;
+package air.found.payproandroidbackend.endpoints.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/test")
 public class TestController {
     @GetMapping
     public String test(){
-        return "E bo bo";
+        return "It works";
     }
 }
