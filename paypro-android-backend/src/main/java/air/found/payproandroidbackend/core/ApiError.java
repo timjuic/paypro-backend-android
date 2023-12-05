@@ -4,6 +4,7 @@ public enum ApiError {
     ERR_TERMINAL_ALREADY_EXISTS(1, "ERR_TERMINAL_ALREADY_EXISTS", "Terminal with the same key already exists!"),
     ERR_INVALID_TERMINAL_KEY(2, "ERR_INVALID_TERMINAL_KEY", "Invalid terminal key provided!"),
     ERR_MERCHANT_NOT_FOUND(3, "ERR_MERCHANT_NOT_FOUND", "Merchant with specified ID couldn't be found!"),
+    ERR_TERMINAL_NOT_FOUND(4, "ERR_TERMINAL_NOT_FOUND", "Terminal with specified ID couldn't be found!"),
     ERR_EMAIL_ALREADY_IN_USE(5, "ERR_EMAIL_ALREADY_IN_USE", "The email address you entered is already associated with an account!"),
     ERR_INVALID_EMAIL_FORMAT(6, "ERR_INVALID_EMAIL_FORMAT", "The email address you entered is not in a valid format. Please enter a valid email address!"),
     ERR_PASSWORD_TOO_WEAK(7, "ERR_PASSWORD_TOO_WEAK", "Your password does not meet the minimum strength requirements. Please create a stronger password!"),

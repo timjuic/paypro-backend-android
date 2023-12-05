@@ -49,6 +49,17 @@ public class TerminalController {
             List<Terminal> terminalList = serviceResult.getData();
             return ApiResponseBuilder.buildSuccessResponse(terminalList, "Terminals for merchant successfully retrieved");
         }
+    }
 
+    @DeleteMapping("/{tid}")
+    public ResponseEntity<ResponseBody<Object>> deleteTerminal(@PathVariable("tid") Integer terminalId) {
+        ServiceResult<Boolean> serviceResult = terminalService.deleteTerminal(terminalId);
+
+        if (!serviceResult.isSuccess()) {
+            ApiError apiError = serviceResult.getApiError();
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
+        } else {
+            return ApiResponseBuilder.buildSuccessResponse(null, "Terminal with id " + terminalId + " successfully deleted!");
+        }
     }
 }
