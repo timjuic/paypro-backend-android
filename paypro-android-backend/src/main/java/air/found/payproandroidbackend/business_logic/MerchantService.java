@@ -141,6 +141,17 @@ public class MerchantService {
         return MERCHANT_NAME_PATTERN.matcher(merchantName).matches();
     }
 
+    public ServiceResult<Set<CardBrand>> getAcceptedCardBrands(Integer merchantId) {
+        Optional<Merchant> merchantOptional = merchantsRepository.findById(merchantId);
+
+        if (merchantOptional.isEmpty()) {
+            return ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND);
+        }
+
+        Merchant merchant = merchantOptional.get();
+        return ServiceResult.success(merchant.getAcceptedCardsEnum());
+    }
+
     private StatusType getStatusTypeById(Integer id) {
         for(StatusType type : StatusType.values()) {
             if(type.getId() == id) {

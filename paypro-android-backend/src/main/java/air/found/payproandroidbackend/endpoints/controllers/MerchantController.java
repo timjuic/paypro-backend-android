@@ -4,6 +4,7 @@ package air.found.payproandroidbackend.endpoints.controllers;
 import air.found.payproandroidbackend.business_logic.MerchantService;
 import air.found.payproandroidbackend.core.ApiError;
 import air.found.payproandroidbackend.core.ServiceResult;
+import air.found.payproandroidbackend.core.models.CardBrand;
 import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import air.found.payproandroidbackend.core.network.ResponseBody;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/merchant")
@@ -67,5 +69,16 @@ public class MerchantController {
             ApiError apiError = result.getApiError();
             return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
         }
+
+    @GetMapping("/{mid}/card-brands")
+    public ResponseEntity<ResponseBody<Set<CardBrand>>> getAcceptedCardBrandsForMerchant(@PathVariable("mid") Integer merchantId) {
+        ServiceResult<Set<CardBrand>> serviceResult = merchantService.getAcceptedCardBrands(merchantId);
+        if (!serviceResult.isSuccess()) {
+            ApiError apiError = serviceResult.getApiError();
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
+        }
+
+        Set<CardBrand> cardBrands = serviceResult.getData();
+        return ApiResponseBuilder.buildSuccessResponse(cardBrands, "Card brands for merchant with ID " + merchantId + " successfully retrieved!");
     }
 }

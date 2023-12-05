@@ -56,6 +56,20 @@ public class TerminalService {
         return ServiceResult.success(terminals);
     }
 
+
+    public ServiceResult<Boolean> deleteTerminal(Integer terminalId) {
+        Optional<Terminal> terminalOptional = terminalRepository.findById(terminalId);
+
+        if (terminalOptional.isEmpty()) {
+            return ServiceResult.failure(ApiError.ERR_TERMINAL_NOT_FOUND);
+        }
+
+        Terminal terminal = terminalOptional.get();
+        terminalRepository.delete(terminal);
+
+        return ServiceResult.success(null);
+    }
+
     private boolean isValidTerminalKey(String terminalKey) {
         if (terminalKey.length() < 2 || terminalKey.length() > 20) {
             return false;

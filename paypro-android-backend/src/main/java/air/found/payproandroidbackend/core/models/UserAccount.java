@@ -23,6 +23,9 @@ public class UserAccount {
     @Column(name = "password", nullable = false, length = 15)
     private String password;
 
+    @Transient
+    private String repeatedPassword;
+
     @Column(name = "is_confirmed", nullable = false)
     private Boolean isConfirmed = false;
 
