@@ -14,9 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class MerchantService {
+    public static final String MERCHANT_NAME_REGEX = "^[A-Za-z0-9 \\$\\-\\&\\'@_]{2,50}$";
+    private static final Pattern MERCHANT_NAME_PATTERN = Pattern.compile(MERCHANT_NAME_REGEX);
+
     private final MerchantRepository merchantsRepository;
 
     @Autowired
@@ -70,6 +75,72 @@ public class MerchantService {
         }
     }
 
+    public ServiceResult<Boolean> updateMerchant(Integer id, Merchant merchant) {
+        if(!isValidName(merchant.getMerchantName())) {
+            return ServiceResult.failure(ApiError.ERR_INVALID_MERCHANT_NAME);
+        }
+        
+        if(merchantExists(merchant.getMerchantName())) {
+            return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
+        }
+
+        ServiceResult<Boolean> cardBrandsResult = updateAcceptedCards(merchant);
+        if (!cardBrandsResult.isSuccess()) {
+            return cardBrandsResult;
+        }
+
+        ServiceResult<Boolean> statusResult = updateStatus(merchant);
+        if (!statusResult.isSuccess()) {
+            return statusResult;
+        }
+
+        try {
+            merchant.setId(id);
+            merchantsRepository.save(merchant);
+            return ServiceResult.success();
+        } catch (Exception ex) {
+            return ServiceResult.failure(ApiError.ERR_INVALID_INPUT);
+        }
+    }
+
+    private ServiceResult<Boolean> updateAcceptedCards(Merchant merchant) {
+        Set<CardBrand> cardBrands = new HashSet<>();
+
+        for (Integer cardId : merchant.getAcceptedCards()) {
+            CardBrandType cardBrandType = getCardBrandTypeById(cardId);
+            if (cardBrandType == null) {
+                return ServiceResult.failure(ApiError.ERR_INVALID_ACCEPTED_CARDS); // New error for invalid card brand
+            }
+            cardBrands.add(new CardBrand(cardBrandType.getId(), cardBrandType.getName()));
+        }
+
+        merchant.setAcceptedCardsEnum(cardBrands);
+        return ServiceResult.success();
+    }
+
+    private ServiceResult<Boolean> updateStatus(Merchant merchant) {
+        StatusType statusType = getStatusTypeById(merchant.getStatus());
+        if (statusType == null) {
+            return ServiceResult.failure(ApiError.ERR_INVALID_STATUS); // New error for invalid status
+        }
+
+        Status status = new Status(statusType.getId(), statusType.getName());
+        merchant.setStatusEnum(status);
+        return ServiceResult.success();
+    }
+
+    private boolean merchantExists(String merchantName) {
+        return merchantsRepository.existsByMerchantName(merchantName);
+    }
+
+    private boolean isValidName(String merchantName) {
+        if (merchantName == null) {
+            return false;
+        }
+
+        return MERCHANT_NAME_PATTERN.matcher(merchantName).matches();
+    }
+
     public ServiceResult<Set<CardBrand>> getAcceptedCardBrands(Integer merchantId) {
         Optional<Merchant> merchantOptional = merchantsRepository.findById(merchantId);
 
@@ -80,7 +151,6 @@ public class MerchantService {
         Merchant merchant = merchantOptional.get();
         return ServiceResult.success(merchant.getAcceptedCardsEnum());
     }
-
 
     private StatusType getStatusTypeById(Integer id) {
         for(StatusType type : StatusType.values()) {

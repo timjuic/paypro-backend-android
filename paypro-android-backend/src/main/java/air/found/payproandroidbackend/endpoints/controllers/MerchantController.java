@@ -59,6 +59,17 @@ public class MerchantController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseBody<Object>> updateMerchant(@PathVariable Integer id, @RequestBody Merchant merchant) {
+        ServiceResult<Boolean> result = merchantService.updateMerchant(id, merchant);
+
+        if (result.isSuccess()) {
+            return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully updated!");
+        } else {
+            ApiError apiError = result.getApiError();
+            return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
+        }
+
     @GetMapping("/{mid}/card-brands")
     public ResponseEntity<ResponseBody<Set<CardBrand>>> getAcceptedCardBrandsForMerchant(@PathVariable("mid") Integer merchantId) {
         ServiceResult<Set<CardBrand>> serviceResult = merchantService.getAcceptedCardBrands(merchantId);
