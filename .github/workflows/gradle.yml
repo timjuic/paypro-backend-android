@@ -46,16 +46,16 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa
           chmod 600 $HOME/.ssh/id_rsa
           ssh-keyscan -H 158.220.113.254 >> $HOME/.ssh/known_hosts
-          ssh root@158.220.113.254 "mkdir -p /air/backend-android"
-          ssh root@158.220.113.254 "cd /air/backend-android"
+          # ssh root@158.220.113.254 "mkdir -p /air/backend-android"
+          ssh root@158.220.113.254 "cd /paypro-android-backend"
           ssh root@158.220.113.254 "git init"
           # ssh root@158.220.113.254 "git remote add origin https://github.com/timjuic/paypro-backend-android"
           ssh root@158.220.113.254 "git pull origin develop"
           ssh root@158.220.113.254 "ls"
           ssh root@158.220.113.254 "pwd"
-          ssh root@158.220.113.254 "cd paypro-android-backend"
-          ssh root@158.220.113.254 "ls"
-          ssh root@158.220.113.254 "pwd"
+          # ssh root@158.220.113.254 "cd paypro-android-backend"
+          # ssh root@158.220.113.254 "ls"
+          # ssh root@158.220.113.254 "pwd"
           ssh root@158.220.113.254 "./gradlew bootRun"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
