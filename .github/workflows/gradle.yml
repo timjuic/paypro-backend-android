@@ -47,7 +47,7 @@ jobs:
           chmod 600 $HOME/.ssh/id_rsa
           ssh-keyscan -H 158.220.113.254 >> $HOME/.ssh/known_hosts
           # ssh root@158.220.113.254 "mkdir -p /air/backend-android"
-          ssh root@158.220.113.254 "cd /paypro-android-backend"
+          ssh root@158.220.113.254 "cd paypro-android-backend"
           ssh root@158.220.113.254 "git init"
           # ssh root@158.220.113.254 "git remote add origin https://github.com/timjuic/paypro-backend-android"
           ssh root@158.220.113.254 "git pull origin develop"
