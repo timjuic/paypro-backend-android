@@ -37,6 +37,8 @@ jobs:
       - name: Build with Gradle
         run: |
           cd paypro-android-backend
+          ls
+          chmod +x gradlew
           ./gradlew build
       - name: Deploy to VPS
         run: |
