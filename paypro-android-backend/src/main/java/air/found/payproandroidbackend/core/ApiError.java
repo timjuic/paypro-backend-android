@@ -10,7 +10,6 @@ public enum ApiError {
     ERR_PASSWORD_TOO_WEAK(7, "ERR_PASSWORD_TOO_WEAK", "Your password does not meet the minimum strength requirements. Please create a stronger password!"),
     ERR_INVALID_INPUT(8, "ERR_INVALID_INPUT", "Your input is invalid. Please check the entered data for accuracy and ensure it meets the required format or criteria!"),
     ERR_PASSWORDS_DONT_MATCH(9, "ERR_PASSWORDS_DONT_MATCH", "The entered passwords do not match. Please ensure that both password fields are identical!"),
-    ERR_INVALID_INPUT(10, "ERR_INVALID_INPUT", "Your input is invalid. Please check the entered data for accuracy and ensure it meets the required format or criteria!"),
     ERR_INVALID_MERCHANT_NAME(11, "ERR_INVALID_MERCHANT_NAME", "The merchant name entered is invalid. Please ensure it meets our naming criteria!"),
     ERR_MERCHANT_ALREADY_EXISTS(12, "ERR_MERCHANT_ALREADY_EXISTS", "The merchant with the provided name already exists!"),
     ERR_INVALID_ACCEPTED_CARDS(13, "ERR_INVALID_ACCEPTED_CARDS", "The defined accepted cards are not valid!"),

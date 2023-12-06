@@ -69,6 +69,7 @@ public class MerchantController {
             ApiError apiError = result.getApiError();
             return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
         }
+    }
 
     @GetMapping("/{mid}/card-brands")
     public ResponseEntity<ResponseBody<Set<CardBrand>>> getAcceptedCardBrandsForMerchant(@PathVariable("mid") Integer merchantId) {
