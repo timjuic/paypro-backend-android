@@ -30,10 +30,10 @@ jobs:
       - name: Print Current Directory
         run: |
           pwd
-
-      - name: Change directory to paypro-android-backend
-        run: cd paypro-android-backend
-
+          ls
+          cd paypro-android-backend
+          pwd
+          ls
       - name: Print Current Directory
         run: |
           pwd
