@@ -21,7 +21,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          additional-java-options: '-Dorg.gradle.java.home=/usr/lib/jvm/gradle' # Adjust the path if necessary
       - name: Build with Gradle
         run: ./gradlew build
       - name: Deploy to VPS
