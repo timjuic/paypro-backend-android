@@ -28,7 +28,7 @@ jobs:
           pwd
       - name: change directory
         run: |
-          cd paypro-android-backend
+          cd ./paypro-android-backend
       - name: List Contents of curr dir
         run: |
           ls
