@@ -34,14 +34,10 @@ jobs:
           cd paypro-android-backend
           pwd
           ls
-      - name: Print Current Directory
-        run: |
-          pwd
-
       - name: Build with Gradle
-        run: ./gradlew build
-        working-directory: paypro-android-backend
-
+        run: |
+          cd paypro-android-backend
+          ./gradlew build
       - name: Deploy to VPS
         run: |
           ssh user@your-vps-ip "cd /path/to/your/app && git pull && ./gradlew bootRun"
