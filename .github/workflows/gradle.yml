@@ -42,6 +42,6 @@ jobs:
           ./gradlew build
       - name: Deploy to VPS
         run: |
-          ssh user@your-vps-ip "cd /path/to/your/app && git pull && ./gradlew bootRun"
+          ssh user@158.220.113.254 "mkdir -p /air/backend-android && cd /path/to/your/app && git pull && ./gradlew bootRun"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
