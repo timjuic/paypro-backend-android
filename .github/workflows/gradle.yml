@@ -29,6 +29,9 @@ jobs:
       - name: List Contents of gradle/wrapper
         run: |
           ls -la gradle/wrapper
+      - name: List Contents of curr dir
+        run: |
+          ls
       - name: Build with Gradle
         run: |
           ./gradle/wrapper/gradlew build
