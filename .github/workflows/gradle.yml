@@ -35,11 +35,11 @@ jobs:
       - name: Print Current Directory
         run: |
           pwd
-      - name: Build with Gradle
-        run: |
-          ./gradle/wrapper/gradlew build
-      - name: Deploy to VPS
-        run: |
-          ssh user@your-vps-ip "cd /path/to/your/app && git pull && ./gradlew bootRun"
+      # - name: Build with Gradle
+      #   run: |
+      #     ./gradle/wrapper/gradlew build
+      # - name: Deploy to VPS
+      #   run: |
+      #     ssh user@your-vps-ip "cd /path/to/your/app && git pull && ./gradlew bootRun"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
