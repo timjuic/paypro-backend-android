@@ -23,6 +23,12 @@ jobs:
           distribution: 'temurin'
       - name: Set JAVA_HOME for Gradle
         run: echo "export GRADLE_OPTS='-Dorg.gradle.java.home=${JAVA_HOME}'" >> $GITHUB_ENV
+      - name: Print Current Directory
+        run: |
+          pwd
+      - name: List Contents of gradle/wrapper
+        run: |
+          ls -la gradle/wrapper
       - name: Build with Gradle
         run: |
           ./gradle/wrapper/gradlew build
