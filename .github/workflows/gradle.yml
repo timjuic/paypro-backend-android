@@ -29,9 +29,12 @@ jobs:
       - name: change directory
         run: |
           cd ./paypro-android-backend
-      - name: List Contents of curr dir
+      - name: change directory 2
         run: |
-          ls
+          cd ./paypro-android-backend
+      - name: Print Current Directory
+        run: |
+          pwd
       - name: Build with Gradle
         run: |
           ./gradle/wrapper/gradlew build
