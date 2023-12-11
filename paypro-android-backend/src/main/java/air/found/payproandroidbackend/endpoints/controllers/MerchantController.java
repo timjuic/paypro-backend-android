@@ -7,6 +7,7 @@ import air.found.payproandroidbackend.core.ServiceResult;
 import air.found.payproandroidbackend.core.models.CardBrand;
 import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,69 +18,47 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/merchant")
 public class MerchantController {
     private final MerchantService merchantService;
 
-    @Autowired
-    public MerchantController(MerchantService merchantService) {
-        this.merchantService = merchantService;
-    }
-
     @GetMapping("/{userId}")
-    public ResponseEntity<ResponseBody<List<Merchant>>> getMerchantsByUserAccount(@PathVariable("userId") Integer userId) {
-        List<Merchant> merchants = merchantService.getMerchantsByUser(userId);
-
-        if (merchants.isEmpty()) {
-            return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, "No merchants found for the user", 2, "ERR_NO_MERCHANTS_FOUND");
-        } else {
-            return ApiResponseBuilder.buildSuccessResponse(merchants, "Merchants successfully retrieved");
-        }
+    public ResponseEntity<ResponseBody<List<Merchant>>> getMerchantsByUserAccount(@PathVariable Integer userId) {
+        ServiceResult<List<Merchant>> result = merchantService.getMerchantsByUser(userId);
+        return respond(result, "Merchants fetched successfully");
     }
 
-    @DeleteMapping("/{id}")
-    public <T> ResponseEntity<ResponseBody<T>> deleteMerchant(@PathVariable Integer id) {
-        boolean deletionResult = merchantService.deleteMerchantById(id);
-
-        if (deletionResult) {
-            return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully deleted!");
-        } else {
-            return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, "Merchant not found", 1, "ERR_MERCHANT_NOT_FOUND");
-        }
+    @DeleteMapping("/{merchantId}")
+    public ResponseEntity<ResponseBody<Void>> deleteMerchant(@PathVariable Integer merchantId) {
+        ServiceResult<Void> result = merchantService.deleteMerchantById(merchantId);
+        return respond(result, "Merchant deleted successfully");
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<ResponseBody<Merchant>> addMerchant(@RequestBody Merchant merchant) {
-        boolean result = merchantService.saveMerchant(merchant);
-
-        if (result) {
-            return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully added!");
-        } else {
-            return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, "Merchant not added", 1, "ERR_MERCHANT_NOT_ADDED");
-        }
+        ServiceResult<Merchant> result = merchantService.saveMerchant(merchant);
+        return respond(result, "Merchant added successfully");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ResponseBody<Object>> updateMerchant(@PathVariable Integer id, @RequestBody Merchant merchant) {
-        ServiceResult<Boolean> result = merchantService.updateMerchant(id, merchant);
+    @PutMapping("/{merchantId}")
+    public ResponseEntity<ResponseBody<Merchant>> updateMerchant(@PathVariable Integer merchantId, @RequestBody Merchant merchant) {
+        ServiceResult<Merchant> result = merchantService.updateMerchant(merchantId, merchant);
+        return respond(result, "Merchant updated successfully");
+    }
 
+    @GetMapping("/{merchantId}/card-brands")
+    public ResponseEntity<ResponseBody<Set<CardBrand>>> getAcceptedCardBrandsForMerchant(@PathVariable Integer merchantId) {
+        ServiceResult<Set<CardBrand>> result = merchantService.getAcceptedCardBrands(merchantId);
+        return respond(result, "Card brands fetched successfully");
+    }
+
+    private <T> ResponseEntity<ResponseBody<T>> respond(ServiceResult<T> result, String successMessage) {
         if (result.isSuccess()) {
-            return ApiResponseBuilder.buildSuccessResponse(null, "Merchant successfully updated!");
+            return ApiResponseBuilder.buildSuccessResponse(result.getData(), successMessage);
         } else {
             ApiError apiError = result.getApiError();
             return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
         }
-    }
-
-    @GetMapping("/{mid}/card-brands")
-    public ResponseEntity<ResponseBody<Set<CardBrand>>> getAcceptedCardBrandsForMerchant(@PathVariable("mid") Integer merchantId) {
-        ServiceResult<Set<CardBrand>> serviceResult = merchantService.getAcceptedCardBrands(merchantId);
-        if (!serviceResult.isSuccess()) {
-            ApiError apiError = serviceResult.getApiError();
-            return ApiResponseBuilder.buildErrorResponse(HttpStatus.NOT_FOUND, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
-        }
-
-        Set<CardBrand> cardBrands = serviceResult.getData();
-        return ApiResponseBuilder.buildSuccessResponse(cardBrands, "Card brands for merchant with ID " + merchantId + " successfully retrieved!");
     }
 }
