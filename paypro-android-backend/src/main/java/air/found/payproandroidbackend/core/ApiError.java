@@ -13,7 +13,8 @@ public enum ApiError {
     ERR_INVALID_MERCHANT_NAME(11, "ERR_INVALID_MERCHANT_NAME", "The merchant name entered is invalid. Please ensure it meets our naming criteria!"),
     ERR_MERCHANT_ALREADY_EXISTS(12, "ERR_MERCHANT_ALREADY_EXISTS", "The merchant with the provided name already exists!"),
     ERR_INVALID_ACCEPTED_CARDS(13, "ERR_INVALID_ACCEPTED_CARDS", "The defined accepted cards are not valid!"),
-    ERR_INVALID_STATUS(14, "ERR_INVALID_STATUS", "The defined status is not valid!")
+    ERR_INVALID_STATUS(14, "ERR_INVALID_STATUS", "The defined status is not valid!"),
+    ERR_INVALID_CREDENTIALS(15, "ERR_INVALID_CREDENTIALS", "The provided credentials are invalid!")
     ;
 
     private final int errorCode;
