@@ -16,7 +16,8 @@ public enum ApiError {
     ERR_INVALID_STATUS(14, "ERR_INVALID_STATUS", "The defined status is not valid!"),
     ERR_INVALID_CREDENTIALS(15, "ERR_INVALID_CREDENTIALS", "The provided credentials are invalid!"),
     ERR_ACCEPTED_CARDS_NOT_DEFINED(16, "ERR_ACCEPTED_CARDS_NOT_DEFINED", "Accepted cards have not been defined!"),
-    ERR_STATUS_NOT_DEFINED(17, "ERR_STATUS_NOT_DEFINED", "Status has not been defined!")
+    ERR_STATUS_NOT_DEFINED(17, "ERR_STATUS_NOT_DEFINED", "Status has not been defined!"),
+    ERR_USER_NOT_FOUND(18, "ERR_USER_NOT_FOUND", "User with specified ID couldn't be found!")
     ;
 
     private final int errorCode;
