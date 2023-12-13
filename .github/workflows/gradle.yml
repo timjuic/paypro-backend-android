@@ -70,11 +70,11 @@ jobs:
             && cd build/libs \
             && PORT=8086 \
             && if lsof -i :$PORT; then \
-              echo "Port $PORT is in use. Killing the process..." \
+              echo \"Port $PORT is in use. Killing the process...\" \
               sudo lsof -t -i:$PORT | xargs kill -9 \
               sleep 2 # Give some time for the process to terminate \
             else \
-              echo "Port $PORT is not in use." \
+              echo \"Port $PORT is not in use.\" \
             fi \
             && nohup java -jar paypro-android-backend-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
         env:
