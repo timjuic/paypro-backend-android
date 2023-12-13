@@ -69,7 +69,7 @@ jobs:
           && ./gradlew build 
           && cd build/libs 
           && PORT=8086
-          if lsof -i :$PORT; then
+          && if lsof -i :$PORT; then
             echo "Port $PORT is in use. Killing the process..."
             sudo lsof -t -i:$PORT | xargs kill -9
             sleep 2 # Give some time for the process to terminate
