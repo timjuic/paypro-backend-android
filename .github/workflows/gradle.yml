@@ -57,25 +57,25 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-          ssh root@158.220.113.254 "mkdir -p paypro-android-backend2
-          && cd paypro-android-backend2 
-          && git init 
-          && git remote -v | grep -q 'origin' || git remote add origin https://github.com/timjuic/paypro-backend-android 
-          && git pull origin develop 
-          && ls 
-          && pwd 
-          && cd paypro-android-backend 
-          && chmod +x gradlew 
-          && ./gradlew build 
-          && cd build/libs 
-          && PORT=8086
-          && if lsof -i :$PORT; then
-            echo "Port $PORT is in use. Killing the process..."
-            sudo lsof -t -i:$PORT | xargs kill -9
-            sleep 2 # Give some time for the process to terminate
-          else
-            echo "Port $PORT is not in use."
-          fi
-          && nohup java -jar paypro-android-backend-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
+          ssh root@158.220.113.254 "mkdir -p paypro-android-backend2 \
+            && cd paypro-android-backend2 \
+            && git init \
+            && git remote -v | grep -q 'origin' || git remote add origin https://github.com/timjuic/paypro-backend-android \
+            && git pull origin develop \
+            && ls \
+            && pwd \
+            && cd paypro-android-backend \
+            && chmod +x gradlew \
+            && ./gradlew build \
+            && cd build/libs \
+            && PORT=8086 \
+            && if lsof -i :$PORT; then \
+              echo "Port $PORT is in use. Killing the process..." \
+              sudo lsof -t -i:$PORT | xargs kill -9 \
+              sleep 2 # Give some time for the process to terminate \
+            else \
+              echo "Port $PORT is not in use." \
+            fi \
+            && nohup java -jar paypro-android-backend-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
