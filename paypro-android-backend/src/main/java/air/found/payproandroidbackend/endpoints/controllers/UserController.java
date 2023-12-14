@@ -5,6 +5,7 @@ import air.found.payproandroidbackend.business_logic.UserService;
 import air.found.payproandroidbackend.core.ApiError;
 import air.found.payproandroidbackend.core.ServiceResult;
 import air.found.payproandroidbackend.core.models.JwtTokenInfo;
+import air.found.payproandroidbackend.core.models.RefreshTokenRequest;
 import air.found.payproandroidbackend.core.models.UserAccount;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import air.found.payproandroidbackend.core.network.ResponseBody;
@@ -37,6 +38,16 @@ public class UserController {
             return ApiResponseBuilder.buildSuccessResponse(token, "You have been successfully logged in!");
         }
         ApiError apiError = result.getApiError();
+        return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<ResponseBody<JwtTokenInfo>> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        JwtTokenInfo token = jwtService.refreshJwtToken(refreshTokenRequest);
+        if(token != null) {
+            return ApiResponseBuilder.buildSuccessResponse(token, "Your token has been successfully refreshed.");
+        }
+        ApiError apiError = ApiError.ERR_INVALID_OR_EXPIRED_REFRESH_TOKEN;
         return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
     }
 

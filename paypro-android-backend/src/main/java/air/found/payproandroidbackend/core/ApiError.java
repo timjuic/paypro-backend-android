@@ -14,7 +14,8 @@ public enum ApiError {
     ERR_MERCHANT_ALREADY_EXISTS(12, "ERR_MERCHANT_ALREADY_EXISTS", "The merchant with the provided name already exists!"),
     ERR_INVALID_ACCEPTED_CARDS(13, "ERR_INVALID_ACCEPTED_CARDS", "The defined accepted cards are not valid!"),
     ERR_INVALID_STATUS(14, "ERR_INVALID_STATUS", "The defined status is not valid!"),
-    ERR_INVALID_CREDENTIALS(15, "ERR_INVALID_CREDENTIALS", "The provided credentials are invalid!")
+    ERR_INVALID_CREDENTIALS(15, "ERR_INVALID_CREDENTIALS", "The provided credentials are invalid!"),
+    ERR_INVALID_OR_EXPIRED_REFRESH_TOKEN(16, "ERR_INVALID_OR_EXPIRED_REFRESH_TOKEN", "The refresh token is invalid or expired!")
     ;
 
     private final int errorCode;
