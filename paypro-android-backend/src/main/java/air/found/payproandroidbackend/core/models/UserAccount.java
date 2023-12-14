@@ -23,11 +23,8 @@ public class UserAccount implements UserDetails {
     @Column(name = "email_address", nullable = false, length = 40)
     private String emailAddress;
 
-    @Column(name = "password", nullable = false, length = 15)
+    @Column(name = "password", nullable = false)
     private String password;
-
-    @Transient
-    private String repeatedPassword;
 
     @Column(name = "is_confirmed", nullable = false)
     private Boolean isConfirmed = false;
@@ -87,6 +84,6 @@ public class UserAccount implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isConfirmed;
+        return true;
     }
 }

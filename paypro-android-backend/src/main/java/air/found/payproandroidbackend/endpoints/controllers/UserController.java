@@ -1,6 +1,6 @@
 package air.found.payproandroidbackend.endpoints.controllers;
 
-import air.found.payproandroidbackend.business_logic.TokenService;
+import air.found.payproandroidbackend.business_logic.JwtService;
 import air.found.payproandroidbackend.business_logic.UserService;
 import air.found.payproandroidbackend.core.ApiError;
 import air.found.payproandroidbackend.core.ServiceResult;
@@ -9,7 +9,6 @@ import air.found.payproandroidbackend.core.models.UserAccount;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import air.found.payproandroidbackend.core.network.ResponseBody;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final TokenService tokenService;
+    private final JwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<ResponseBody<Void>> registration(@RequestBody UserAccount userAccount) {
@@ -34,7 +33,7 @@ public class UserController {
     public ResponseEntity<ResponseBody<JwtTokenInfo>> login(@RequestBody UserAccount userAccount) {
         ServiceResult<UserAccount> result = userService.loginUser(userAccount);
         if (result.isSuccess()) {
-            JwtTokenInfo token = tokenService.getJwtToken(result.getData());
+            JwtTokenInfo token = jwtService.getJwtToken(result.getData());
             return ApiResponseBuilder.buildSuccessResponse(token, "You have been successfully logged in!");
         }
         ApiError apiError = result.getApiError();

@@ -1,5 +1,6 @@
 package air.found.payproandroidbackend.config;
 
+import air.found.payproandroidbackend.business_logic.AuthService;
 import air.found.payproandroidbackend.business_logic.JwtService;
 import air.found.payproandroidbackend.business_logic.UserService;
 import jakarta.servlet.FilterChain;
@@ -22,7 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final UserService userService;
+    private final AuthService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
