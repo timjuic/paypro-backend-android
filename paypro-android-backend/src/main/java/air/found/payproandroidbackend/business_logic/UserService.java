@@ -5,6 +5,9 @@ import air.found.payproandroidbackend.core.ServiceResult;
 import air.found.payproandroidbackend.core.models.UserAccount;
 import air.found.payproandroidbackend.data_access.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
@@ -14,6 +17,16 @@ import java.util.regex.Pattern;
 public class UserService {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     private final UserRepository userRepository;
+
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return userRepository.findByEmailAddress(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            }
+        };
+    }
 
     public ServiceResult<UserAccount> loginUser(UserAccount userAccount) {
         if (isInvalidEmailFormat(userAccount.getEmailAddress())) {
