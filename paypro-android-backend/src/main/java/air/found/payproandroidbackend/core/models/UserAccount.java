@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "user_accounts")
 @Data
 @NoArgsConstructor
-public class UserAccount extends UserDetails {
+public class UserAccount implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
