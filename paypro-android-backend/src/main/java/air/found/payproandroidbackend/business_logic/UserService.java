@@ -1,17 +1,12 @@
 package air.found.payproandroidbackend.business_logic;
 
 import air.found.payproandroidbackend.core.ApiError;
-import air.found.payproandroidbackend.core.PasswordHashing;
 import air.found.payproandroidbackend.core.ServiceResult;
 import air.found.payproandroidbackend.core.models.UserAccount;
 import air.found.payproandroidbackend.data_access.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
