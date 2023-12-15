@@ -32,12 +32,7 @@ public class JwtService {
         JwtTokenInfo jwtToken = new JwtTokenInfo();
         jwtToken.setAccess_token(buildJws(userAccount, issuedAt));
 
-        JwtTokenInfo.RefreshToken refreshToken = new JwtTokenInfo.RefreshToken();
-        JwtTokenInfo.RefreshToken.Validity validity = new JwtTokenInfo.RefreshToken.Validity();
-
-        validity.setTime_unit("minutes");
-        validity.setTime_amount(EXPIRATION_IN_MINUTES + 90);
-        refreshToken.setValid_for(validity);
+        JwtTokenInfo.RefreshToken refreshToken = createRefreshToken(userAccount, issuedAt);
         refreshToken.setToken(buildRefresh(userAccount, issuedAt));
 
         jwtToken.setRefresh_token(refreshToken);
@@ -48,9 +43,9 @@ public class JwtService {
     public JwtTokenInfo refreshJwtToken(RefreshTokenRequest refreshTokenRequest) {
         String userEmail = extractUserName(refreshTokenRequest.getRefreshToken());
         Optional<UserAccount> userAccountDB = userRepository.findByEmailAddress(userEmail);
-        UserAccount userAccount;
+
         if(userAccountDB.isPresent()) {
-            userAccount = userAccountDB.get();
+            UserAccount userAccount = userAccountDB.get();
 
             if(isTokenValid(refreshTokenRequest.getRefreshToken(), userAccount)) {
                 Date issuedAt = new Date();
@@ -58,12 +53,7 @@ public class JwtService {
                 JwtTokenInfo jwtToken = new JwtTokenInfo();
                 jwtToken.setAccess_token(buildJws(userAccount, issuedAt));
 
-                JwtTokenInfo.RefreshToken refreshToken = new JwtTokenInfo.RefreshToken();
-                JwtTokenInfo.RefreshToken.Validity validity = new JwtTokenInfo.RefreshToken.Validity();
-
-                validity.setTime_unit("minutes");
-                validity.setTime_amount(EXPIRATION_IN_MINUTES + 90);
-                refreshToken.setValid_for(validity);
+                JwtTokenInfo.RefreshToken refreshToken = createRefreshToken(userAccount, issuedAt);
                 refreshToken.setToken(buildRefresh(userAccount, issuedAt));
 
                 jwtToken.setRefresh_token(refreshToken);
@@ -109,6 +99,18 @@ public class JwtService {
                 .signWith(generateKey(), Jwts.SIG.HS256)
 
                 .compact();
+    }
+
+    private JwtTokenInfo.RefreshToken createRefreshToken(UserAccount userAccount, Date issuedAt) {
+        JwtTokenInfo.RefreshToken refreshToken = new JwtTokenInfo.RefreshToken();
+        JwtTokenInfo.RefreshToken.Validity validity = new JwtTokenInfo.RefreshToken.Validity();
+
+        validity.setTime_unit("minutes");
+        validity.setTime_amount(EXPIRATION_IN_MINUTES + 90);
+        refreshToken.setValid_for(validity);
+        refreshToken.setToken(buildRefresh(userAccount, issuedAt));
+
+        return refreshToken;
     }
 
     public String extractUserName(String token) {
