@@ -7,7 +7,6 @@ import air.found.payproandroidbackend.core.models.Terminal;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import air.found.payproandroidbackend.core.network.ResponseBody;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +33,8 @@ public class TerminalController {
     }
 
     @DeleteMapping("/{tid}")
-    public ResponseEntity<ResponseBody<Void>> deleteTerminal(@PathVariable("tid") Integer terminalId) {
-        ServiceResult<Void> result = terminalService.deleteTerminal(terminalId);
+    public ResponseEntity<ResponseBody<Void>> deleteTerminal(@PathVariable("tid") Integer terminalId, @PathVariable("mid") Integer merchantId) {
+        ServiceResult<Void> result = terminalService.deleteTerminal(terminalId, merchantId);
         return respond(result, "Terminal with id " + terminalId + " successfully deleted");
     }
 
