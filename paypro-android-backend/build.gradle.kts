@@ -25,7 +25,8 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-
+	implementation("org.springframework.boot:spring-boot-starter-security:3.2.0")
+	implementation("org.apache.commons:commons-lang3:3.14.0")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.hibernate:hibernate-core:6.4.0.Final")
