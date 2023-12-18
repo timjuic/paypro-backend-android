@@ -30,7 +30,17 @@ public class UserService {
         if (isInvalidEmailFormat(userAccount.getEmailAddress())) {
             return ServiceResult.failure(ApiError.ERR_INVALID_EMAIL_FORMAT);
         }
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAccount.getEmailAddress(), userAccount.getPassword()));
+
+        Optional<UserAccount> checkGoogle = userRepository.findByEmailAddress(userAccount.getEmailAddress());
+        if(checkGoogle.isPresent() && checkGoogle.get().getIsGoogle()) {
+            return ServiceResult.failure(ApiError.ERR_USE_GOOGLE_LOGIN);
+        }
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAccount.getEmailAddress(), userAccount.getPassword()));
+        } catch (Exception ex) {
+            return ServiceResult.failure(ApiError.ERR_INVALID_CREDENTIALS);
+        }
 
         return userRepository.findByEmailAddress(userAccount.getEmailAddress())
                 .map(ServiceResult::success)
