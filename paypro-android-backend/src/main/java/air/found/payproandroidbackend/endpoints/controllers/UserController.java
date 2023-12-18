@@ -1,5 +1,6 @@
 package air.found.payproandroidbackend.endpoints.controllers;
 
+import air.found.payproandroidbackend.business_logic.GoogleTokenVerifierService;
 import air.found.payproandroidbackend.business_logic.JwtService;
 import air.found.payproandroidbackend.business_logic.UserService;
 import air.found.payproandroidbackend.core.ApiError;
@@ -9,6 +10,7 @@ import air.found.payproandroidbackend.core.models.RefreshTokenRequest;
 import air.found.payproandroidbackend.core.models.UserAccount;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import air.found.payproandroidbackend.core.network.ResponseBody;
+import com.google.api.client.json.webtoken.JsonWebToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +50,17 @@ public class UserController {
             return ApiResponseBuilder.buildSuccessResponse(token, "Your token has been successfully refreshed.");
         }
         ApiError apiError = ApiError.ERR_INVALID_OR_EXPIRED_REFRESH_TOKEN;
+        return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<ResponseBody<JwtTokenInfo>> google(@RequestBody String idToken) {
+        ServiceResult<UserAccount> result = userService.google(idToken);
+        if(result.isSuccess()) {
+            JwtTokenInfo token = jwtService.getJwtToken(result.getData());
+            return ApiResponseBuilder.buildSuccessResponse(token, "You have been successfully logged in!");
+        }
+        ApiError apiError = result.getApiError();
         return ApiResponseBuilder.buildErrorResponse(HttpStatus.BAD_REQUEST, apiError.getErrorMessage(), apiError.getErrorCode(), apiError.getErrorName());
     }
 
