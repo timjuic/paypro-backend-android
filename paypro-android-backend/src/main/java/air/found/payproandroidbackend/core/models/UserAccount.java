@@ -44,6 +44,9 @@ public class UserAccount implements UserDetails {
     @Column(name = "last_name", nullable = false, length = 20)
     private String lastName;
 
+    @Column(name = "isGoogle")
+    private Boolean isGoogle = false;
+
     @ManyToMany
     @JoinTable(
             name = "user_merchants",
