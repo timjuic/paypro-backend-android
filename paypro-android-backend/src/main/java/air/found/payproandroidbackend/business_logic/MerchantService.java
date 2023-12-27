@@ -7,6 +7,7 @@ import air.found.payproandroidbackend.core.enums.StatusType;
 import air.found.payproandroidbackend.core.models.CardBrand;
 import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.models.Status;
+import air.found.payproandroidbackend.data_access.manual.MerchantEntityRepository;
 import air.found.payproandroidbackend.data_access.persistence.MerchantRepository;
 import air.found.payproandroidbackend.data_access.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,13 @@ public class MerchantService {
     private static final Pattern MERCHANT_NAME_PATTERN = Pattern.compile("^[A-Za-z0-9 \\$\\-\\&\\'@_]{2,50}$");
     private final MerchantRepository merchantsRepository;
     private final UserRepository userRepository;
+    private final MerchantEntityRepository merchantEntityRepository;
 
-    public ServiceResult<List<Merchant>> getMerchantsByUser(Integer userId) {
+    public ServiceResult<List<Map<String, Object>>> getMerchantsByUser(Integer userId) {
         if(userRepository.findById(userId).isEmpty()) {
             return ServiceResult.failure(ApiError.ERR_USER_NOT_FOUND);
         }
-        List<Merchant> merchants = air.found.payproandroidbackend.data_access.manual.MerchantRepository.getMerchantsByUser(userId);
+        List<Map<String, Object>> merchants = merchantEntityRepository.findMerchantsAndTerminalsByUserId(userId);
         if(merchants.isEmpty()) {
             return ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND);
         }

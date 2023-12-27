@@ -8,13 +8,13 @@ import air.found.payproandroidbackend.core.models.CardBrand;
 import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.network.ApiResponseBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import air.found.payproandroidbackend.core.network.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -24,8 +24,8 @@ public class MerchantController {
     private final MerchantService merchantService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<ResponseBody<List<Merchant>>> getMerchantsByUserAccount(@PathVariable Integer userId) {
-        ServiceResult<List<Merchant>> result = merchantService.getMerchantsByUser(userId);
+    public ResponseEntity<ResponseBody<List<Map<String, Object>>>> getMerchantsByUserAccount(@PathVariable Integer userId) {
+        ServiceResult<List<Map<String, Object>>> result = merchantService.getMerchantsByUser(userId);
         return respond(result, "Merchants fetched successfully");
     }
 
