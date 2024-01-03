@@ -35,9 +35,9 @@ public class MerchantController {
         return respond(result, "Merchant deleted successfully");
     }
 
-    @PostMapping
-    public ResponseEntity<ResponseBody<Merchant>> addMerchant(@RequestBody Merchant merchant) {
-        ServiceResult<Merchant> result = merchantService.saveMerchant(merchant);
+    @PostMapping("/{userId}")
+    public ResponseEntity<ResponseBody<Merchant>> addMerchant(@PathVariable Integer userId, @RequestBody Merchant merchant) {
+        ServiceResult<Merchant> result = merchantService.saveMerchant(merchant, userId);
         return respond(result, "Merchant added successfully");
     }
 

@@ -7,7 +7,9 @@ import air.found.payproandroidbackend.core.enums.StatusType;
 import air.found.payproandroidbackend.core.models.CardBrand;
 import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.models.Status;
+import air.found.payproandroidbackend.core.models.UserAccount;
 import air.found.payproandroidbackend.data_access.manual.MerchantEntityRepository;
+import air.found.payproandroidbackend.data_access.manual.UserMerchantsRepository;
 import air.found.payproandroidbackend.data_access.persistence.MerchantRepository;
 import air.found.payproandroidbackend.data_access.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class MerchantService {
     private final MerchantRepository merchantsRepository;
     private final UserRepository userRepository;
     private final MerchantEntityRepository merchantEntityRepository;
+    private final UserMerchantsRepository userMerchantsRepository;
 
     public ServiceResult<List<Map<String, Object>>> getMerchantsByUser(Integer userId) {
         if(userRepository.findById(userId).isEmpty()) {
@@ -45,20 +48,30 @@ public class MerchantService {
                 .orElseGet(() -> ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND));
     }
 
-    public ServiceResult<Merchant> saveMerchant(Merchant merchant) {
+    public ServiceResult<Merchant> saveMerchant(Merchant merchant, Integer userId) {
         ServiceResult<Merchant> validationResult = validateMerchant(merchant);
-        if(!validationResult.isSuccess()) {
+        if (!validationResult.isSuccess()) {
             return validationResult;
         }
 
         try {
+            Optional<UserAccount> userOptional = userRepository.findById(userId);
+            if (userOptional.isEmpty()) return ServiceResult.failure(ApiError.ERR_USER_NOT_FOUND);
+
             Merchant savedMerchant = merchantsRepository.save(merchant);
+
+            UserAccount user = userOptional.get();
+            userMerchantsRepository.addUserMerchantRelationship(user.getUserId(), savedMerchant.getId());
+
             return ServiceResult.success(savedMerchant);
-        }
-        catch (Exception ex) {
+
+        } catch (Exception ex) {
+            System.out.println(ex);
             return ServiceResult.failure(ApiError.ERR_INVALID_INPUT);
         }
     }
+
+
 
     public ServiceResult<Merchant> updateMerchant(Integer id, Merchant merchant) {
         ServiceResult<Merchant> validationResult = validateMerchant(merchant);
