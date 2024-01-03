@@ -32,7 +32,7 @@ public class MerchantService {
         if(userRepository.findById(userId).isEmpty()) {
             return ServiceResult.failure(ApiError.ERR_USER_NOT_FOUND);
         }
-        List<Map<String, Object>> merchants = merchantEntityRepository.findMerchantsAndTerminalsByUserId(userId);
+        List<Map<String, Object>> merchants = merchantEntityRepository.getMerchantsByUser(userId);
         if(merchants.isEmpty()) {
             return ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND);
         }
