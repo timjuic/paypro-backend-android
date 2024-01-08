@@ -23,7 +23,7 @@ public class Status {
     @Column(name = "status_name", length = 20)
     private String statusName;
 
-    @OneToMany(mappedBy = "statusEnum")
+    @OneToMany(mappedBy = "status")
     private List<Merchant> merchants;
 
     @OneToMany(mappedBy = "status")

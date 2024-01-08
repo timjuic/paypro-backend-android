@@ -15,4 +15,13 @@ public enum StatusType {
         this.id = id;
         this.name = name;
     }
+
+    public static String getNameById(int id) {
+        for (StatusType status : StatusType.values()) {
+            if (status.getId() == id) {
+                return status.getName();
+            }
+        }
+        return null;
+    }
 }

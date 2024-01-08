@@ -1,5 +1,10 @@
 package air.found.payproandroidbackend.core.models;
 
+import air.found.payproandroidbackend.core.enums.StatusType;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,14 +37,14 @@ public class Merchant {
             joinColumns = @JoinColumn(name = "merchant_id"),
             inverseJoinColumns = @JoinColumn(name = "card_brand_id")
     )
-    private Set<CardBrand> acceptedCardsEnum;
+    private Set<CardBrand> acceptedCards;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
-    private Status statusEnum;
+    private Status status;
 
     @OneToMany(mappedBy = "merchant")
     private List<Terminal> terminals;
@@ -51,12 +56,6 @@ public class Merchant {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<UserAccount> userAccounts;
-
-    @Transient
-    private List<Integer> acceptedCards;
-
-    @Transient
-    private Integer status;
 
     @PrePersist
     public void prePersist() {
