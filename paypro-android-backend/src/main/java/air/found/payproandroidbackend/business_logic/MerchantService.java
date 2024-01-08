@@ -114,7 +114,7 @@ public class MerchantService {
             return ServiceResult.failure(ApiError.ERR_INVALID_STATUS);
         }
         if (!(merchant.getAddress().getStreetName().length() >= 2 && merchant.getAddress().getStreetName().length() <= 100) ||
-                (merchant.getAddress().getStreetNumber().isEmpty() || merchant.getAddress().getStreetName().length() > 10)) {
+                (merchant.getAddress().getStreetNumber().isEmpty() || merchant.getAddress().getStreetNumber().length() > 10)) {
             return ServiceResult.failure(ApiError.ERR_INVALID_INPUT);
         }
 
