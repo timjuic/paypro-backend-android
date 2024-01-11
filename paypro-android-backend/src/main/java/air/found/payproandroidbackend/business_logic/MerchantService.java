@@ -82,6 +82,7 @@ public class MerchantService {
         return merchantsRepository.findById(id)
                 .map(existingMerchant -> {
                     merchant.setId(id);
+                    merchant.setUserAccounts(existingMerchant.getUserAccounts());
                     merchantsRepository.save(merchant);
                     return ServiceResult.success(merchant);
                 })
