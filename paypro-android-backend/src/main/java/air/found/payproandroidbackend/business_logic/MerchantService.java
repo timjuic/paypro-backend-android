@@ -7,10 +7,12 @@ import air.found.payproandroidbackend.core.enums.StatusType;
 import air.found.payproandroidbackend.core.models.CardBrand;
 import air.found.payproandroidbackend.core.models.Merchant;
 import air.found.payproandroidbackend.core.models.Status;
-import air.found.payproandroidbackend.data_access.persistence.CardBrandRepository;
+import air.found.payproandroidbackend.core.models.UserAccount;
+import air.found.payproandroidbackend.data_access.manual.MerchantEntityRepository;
+import air.found.payproandroidbackend.data_access.manual.UserMerchantsRepository;
 import air.found.payproandroidbackend.data_access.persistence.MerchantRepository;
-import air.found.payproandroidbackend.data_access.persistence.StatusRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import air.found.payproandroidbackend.data_access.persistence.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,157 +20,126 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MerchantService {
-    public static final String MERCHANT_NAME_REGEX = "^[A-Za-z0-9 \\$\\-\\&\\'@_]{2,50}$";
-    private static final Pattern MERCHANT_NAME_PATTERN = Pattern.compile(MERCHANT_NAME_REGEX);
-
+    private static final Pattern MERCHANT_NAME_PATTERN = Pattern.compile("^[A-Za-z0-9 \\$\\-\\&\\'@_]{2,50}$");
     private final MerchantRepository merchantsRepository;
+    private final UserRepository userRepository;
+    private final MerchantEntityRepository merchantEntityRepository;
+    private final UserMerchantsRepository userMerchantsRepository;
 
-    @Autowired
-    public MerchantService(MerchantRepository merchantsRepository) {
-        this.merchantsRepository = merchantsRepository;
+    public ServiceResult<List<Map<String, Object>>> getMerchantsByUser(Integer userId) {
+        if(userRepository.findById(userId).isEmpty()) {
+            return ServiceResult.failure(ApiError.ERR_USER_NOT_FOUND);
+        }
+        List<Map<String, Object>> merchants = merchantEntityRepository.getMerchantsByUser(userId);
+        if(merchants.isEmpty()) {
+            return ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND);
+        }
+        return ServiceResult.success(merchants);
     }
 
-    public List<Merchant> getMerchantsByUser(Integer userId) {
-        return air.found.payproandroidbackend.data_access.manual.MerchantRepository.getMerchantsByUser(userId);
+    public ServiceResult<Void> deleteMerchantById(Integer merchantId) {
+        return merchantsRepository.findById(merchantId)
+                .map(merchant -> {
+                    merchantsRepository.deleteById(merchantId);
+                    return ServiceResult.<Void>success();
+                })
+                .orElseGet(() -> ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND));
     }
 
-    public boolean deleteMerchantById(Integer merchantId) {
-        Optional<Merchant> merchantOptional = merchantsRepository.findById(merchantId);
-
-        if (merchantOptional.isPresent()) {
-            merchantsRepository.deleteById(merchantId);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean saveMerchant(Merchant merchant) {
-        try{
-            if(merchant.getAcceptedCards() != null) {
-                Set<CardBrand> cardBrands = new HashSet<>();
-
-                for(Integer id : merchant.getAcceptedCards()) {
-                    CardBrandType cardBrandType = getCardBrandTypeById(id);
-                    if(cardBrandType != null) {
-                        CardBrand cardBrand = new CardBrand(id, cardBrandType.getName());
-                        cardBrands.add(cardBrand);
-                    }
-                }
-
-                merchant.setAcceptedCardsEnum(cardBrands);
-            }
-
-            if(merchant.getStatus() != null) {
-                StatusType statusType = getStatusTypeById(merchant.getStatus());
-                if(statusType != null) {
-                    Status status = new Status(statusType.getId(), statusType.getName());
-                    merchant.setStatusEnum(status);
-                }
-            }
-
-            merchantsRepository.save(merchant);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
-    public ServiceResult<Boolean> updateMerchant(Integer id, Merchant merchant) {
-        if(!isValidName(merchant.getMerchantName())) {
-            return ServiceResult.failure(ApiError.ERR_INVALID_MERCHANT_NAME);
-        }
-        
-        if(merchantExists(merchant.getMerchantName())) {
-            return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
-        }
-
-        ServiceResult<Boolean> cardBrandsResult = updateAcceptedCards(merchant);
-        if (!cardBrandsResult.isSuccess()) {
-            return cardBrandsResult;
-        }
-
-        ServiceResult<Boolean> statusResult = updateStatus(merchant);
-        if (!statusResult.isSuccess()) {
-            return statusResult;
+    public ServiceResult<Merchant> saveMerchant(Merchant merchant, Integer userId) {
+        ServiceResult<Merchant> validationResult = validateMerchant(merchant);
+        if (!validationResult.isSuccess()) {
+            return validationResult;
         }
 
         try {
-            merchant.setId(id);
-            merchantsRepository.save(merchant);
-            return ServiceResult.success();
+            Optional<UserAccount> userOptional = userRepository.findById(userId);
+            if (userOptional.isEmpty()) return ServiceResult.failure(ApiError.ERR_USER_NOT_FOUND);
+
+            Merchant savedMerchant = merchantsRepository.save(merchant);
+
+            UserAccount user = userOptional.get();
+            userMerchantsRepository.addUserMerchantRelationship(user.getUserId(), savedMerchant.getId());
+
+            return ServiceResult.success(savedMerchant);
+
         } catch (Exception ex) {
+            System.out.println(ex);
             return ServiceResult.failure(ApiError.ERR_INVALID_INPUT);
         }
     }
 
-    private ServiceResult<Boolean> updateAcceptedCards(Merchant merchant) {
-        Set<CardBrand> cardBrands = new HashSet<>();
 
-        for (Integer cardId : merchant.getAcceptedCards()) {
-            CardBrandType cardBrandType = getCardBrandTypeById(cardId);
-            if (cardBrandType == null) {
-                return ServiceResult.failure(ApiError.ERR_INVALID_ACCEPTED_CARDS); // New error for invalid card brand
-            }
-            cardBrands.add(new CardBrand(cardBrandType.getId(), cardBrandType.getName()));
+
+    public ServiceResult<Merchant> updateMerchant(Integer id, Merchant merchant) {
+        ServiceResult<Merchant> validationResult = validateMerchant(merchant);
+        if(!validationResult.isSuccess()) {
+            return validationResult;
         }
 
-        merchant.setAcceptedCardsEnum(cardBrands);
-        return ServiceResult.success();
-    }
-
-    private ServiceResult<Boolean> updateStatus(Merchant merchant) {
-        StatusType statusType = getStatusTypeById(merchant.getStatus());
-        if (statusType == null) {
-            return ServiceResult.failure(ApiError.ERR_INVALID_STATUS); // New error for invalid status
-        }
-
-        Status status = new Status(statusType.getId(), statusType.getName());
-        merchant.setStatusEnum(status);
-        return ServiceResult.success();
-    }
-
-    private boolean merchantExists(String merchantName) {
-        return merchantsRepository.existsByMerchantName(merchantName);
-    }
-
-    private boolean isValidName(String merchantName) {
-        if (merchantName == null) {
-            return false;
-        }
-
-        return MERCHANT_NAME_PATTERN.matcher(merchantName).matches();
+        return merchantsRepository.findById(id)
+                .map(existingMerchant -> {
+                    merchant.setId(id);
+                    merchant.setUserAccounts(existingMerchant.getUserAccounts());
+                    merchantsRepository.save(merchant);
+                    return ServiceResult.success(merchant);
+                })
+                .orElseGet(() -> ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND));
     }
 
     public ServiceResult<Set<CardBrand>> getAcceptedCardBrands(Integer merchantId) {
-        Optional<Merchant> merchantOptional = merchantsRepository.findById(merchantId);
-
-        if (merchantOptional.isEmpty()) {
-            return ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND);
-        }
-
-        Merchant merchant = merchantOptional.get();
-        return ServiceResult.success(merchant.getAcceptedCardsEnum());
+        return merchantsRepository.findById(merchantId)
+                .map(merchant -> ServiceResult.success(merchant.getAcceptedCards()))
+                .orElseGet(() -> ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND));
     }
 
-    private StatusType getStatusTypeById(Integer id) {
-        for(StatusType type : StatusType.values()) {
-            if(type.getId() == id) {
-                return type;
-            }
+    private ServiceResult<Merchant> validateMerchant(Merchant merchant) {
+        if (isInvalidName(merchant.getMerchantName())) {
+            return ServiceResult.failure(ApiError.ERR_INVALID_MERCHANT_NAME);
+        }
+        if (merchantsRepository.existsByMerchantName(merchant.getMerchantName())) {
+            return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
+        }
+        if (merchant.getAcceptedCards().isEmpty()) {
+            return ServiceResult.failure(ApiError.ERR_ACCEPTED_CARDS_NOT_DEFINED);
+        }
+        if (merchant.getStatus().getStatusId() == null) {
+            return ServiceResult.failure(ApiError.ERR_STATUS_NOT_DEFINED);
+        }
+        if (!isValidCardBrands(merchant.getAcceptedCards())) {
+            return ServiceResult.failure(ApiError.ERR_INVALID_ACCEPTED_CARDS);
+        }
+        if (!isValidStatus(merchant.getStatus())) {
+            return ServiceResult.failure(ApiError.ERR_INVALID_STATUS);
+        }
+        if (!(merchant.getAddress().getStreetName().length() >= 2 && merchant.getAddress().getStreetName().length() <= 100) ||
+                (merchant.getAddress().getStreetNumber().isEmpty() || merchant.getAddress().getStreetNumber().length() > 10)) {
+            return ServiceResult.failure(ApiError.ERR_INVALID_INPUT);
         }
 
-        return null;
+        return ServiceResult.success(null); // Return success with no data if validation passes
     }
 
-    private CardBrandType getCardBrandTypeById(Integer id) {
-        for(CardBrandType type : CardBrandType.values()) {
-            if(type.getId() == id) {
-                return type;
-            }
-        }
+    private boolean isValidStatus(Status status) {
+        Set<String> validNames = Arrays.stream(StatusType.values())
+                .map(StatusType::getName)
+                .collect(Collectors.toSet());
 
-        return null;
+        return validNames.contains(status.getStatusName());
+    }
+
+    private boolean isValidCardBrands(Set<CardBrand> cardBrands) {
+        Set<String> validNames = Arrays.stream(CardBrandType.values())
+                .map(CardBrandType::getName)
+                .collect(Collectors.toSet());
+
+        return cardBrands.stream()
+                .allMatch(cardBrand -> validNames.contains(cardBrand.getName()));
+    }
+
+    private boolean isInvalidName(String merchantName) {
+        return merchantName == null || !MERCHANT_NAME_PATTERN.matcher(merchantName).matches();
     }
 }

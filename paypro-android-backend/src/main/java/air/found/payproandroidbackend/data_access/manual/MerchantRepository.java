@@ -1,6 +1,8 @@
 package air.found.payproandroidbackend.data_access.manual;
 
+import air.found.payproandroidbackend.core.enums.StatusType;
 import air.found.payproandroidbackend.core.models.Merchant;
+import air.found.payproandroidbackend.core.models.Status;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -64,7 +66,10 @@ public class MerchantRepository {
         Merchant merchant = new Merchant();
         merchant.setId(resultSet.getInt("merchant_id"));
         merchant.setMerchantName(resultSet.getString("full_name"));
-        merchant.setStatus(resultSet.getInt("status_id"));
+        Status status = new Status();
+        status.setStatusId(resultSet.getInt("status_id"));
+        status.setStatusName(StatusType.getNameById(resultSet.getInt("status_id")));
+        merchant.setStatus(status);
         Merchant.Address address = new Merchant.Address();
         address.setStreetName(resultSet.getString("street_name"));
         address.setCity(resultSet.getString("city_name"));
