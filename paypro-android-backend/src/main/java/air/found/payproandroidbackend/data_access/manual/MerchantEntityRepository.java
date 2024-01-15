@@ -2,7 +2,6 @@ package air.found.payproandroidbackend.data_access.manual;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,19 +84,28 @@ public class MerchantEntityRepository {
             }
 
             if (row[11] != null) {
-                Map<String, Object> terminalMap = new HashMap<>();
-                terminalMap.put("terminalId", row[11]);
-                terminalMap.put("terminalCreatedAt", row[12]);
-                terminalMap.put("terminalKey", row[13]);
-                terminalMap.put("terminalType", row[14]);
+                Integer terminalId = (Integer) row[11];
+                Map<String, Object> merchant = merchantMap.get(merchantId);
 
-                Map<String, Object> terminalStatusMap = new HashMap<>();
-                terminalStatusMap.put("statusId", row[15]);
-                terminalStatusMap.put("statusName", row[16]);
-                terminalMap.put("status", terminalStatusMap);
+                // Check if the terminal with the current ID already exists
+                List<Map<String, Object>> terminals = (List<Map<String, Object>>) merchant.get("terminals");
+                boolean terminalExists = terminals.stream()
+                        .anyMatch(t -> terminalId.equals(t.get("terminalId")));
 
-                List<Map<String, Object>> terminals = (List<Map<String, Object>>) merchantMap.get(merchantId).get("terminals");
-                terminals.add(terminalMap);
+                if (!terminalExists) {
+                    Map<String, Object> terminalMap = new HashMap<>();
+                    terminalMap.put("terminalId", terminalId);
+                    terminalMap.put("terminalCreatedAt", row[12]);
+                    terminalMap.put("terminalKey", row[13]);
+                    terminalMap.put("terminalType", row[14]);
+
+                    Map<String, Object> terminalStatusMap = new HashMap<>();
+                    terminalStatusMap.put("statusId", row[15]);
+                    terminalStatusMap.put("statusName", row[16]);
+                    terminalMap.put("status", terminalStatusMap);
+
+                    terminals.add(terminalMap);
+                }
             }
         }
 
