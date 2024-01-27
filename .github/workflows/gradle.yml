@@ -51,6 +51,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
           ssh -v root@158.220.113.254 "\
+          export DB_USERNAME=${DB_USERNAME} && \
+          export DB_PASSWORD=${DB_PASSWORD} && \
+          export DB_NAME=${DB_NAME} && \
+          export SERVER_IP=${SERVER_IP} && \
           mkdir -p paypro-android-backend2 && \
           cd paypro-android-backend2 && \
           git init && \
@@ -58,7 +62,12 @@ jobs:
           git pull origin develop && \
           ls && \
           pwd && \
-          cd paypro-android-backend && \
+          cd paypro-android-backend/src/main/resources && \
+          echo 'DB.USERNAME=${DB_USERNAME}' > secrets.properties && \
+          echo 'DB.PASSWORD=${DB_PASSWORD}' >> secrets.properties && \
+          echo 'DB.NAME=${DB_NAME}' >> secrets.properties && \
+          echo 'SERVER.IP=${SERVER_IP}' >> secrets.properties && \
+          cd ../../../ && \
           chmod +x gradlew && \
           ./gradlew build && \
           fuser -k 8086/tcp && \
