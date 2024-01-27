@@ -1,12 +1,11 @@
 package air.found.payproandroidbackend;
 
-import air.found.payproandroidbackend.config.SecretsProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication()
-@EnableConfigurationProperties(SecretsProperties.class)
+@PropertySource("classpath:secrets.properties")
 public class PayproAndroidBackendApplication {
 
 	public static void main(String[] args) {
