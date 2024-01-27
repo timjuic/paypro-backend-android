@@ -62,9 +62,13 @@ jobs:
           git pull origin develop && \
           ls && \
           pwd && \
-          cd paypro-android-backend && \
-          echo "${{ secrets.DB_USERNAME }}" > db_username.txt
-          echo "${{ secrets.DB_PASSWORD }}" > db_password.txt
+          cd paypro-android-backend/src/main/resources && \
+          echo "db.username=${{ secrets.DB_USERNAME }}" > secrets.properties && \
+          echo "db.password=${{ secrets.DB_PASSWORD }}" >> secrets.properties && \
+          echo "db.password=${{ secrets.DB_NAME }}" >> secrets.properties && \
+          echo "db.password=${{ secrets.SERVER_IP }}" >> secrets.properties && \
+          cd ../../../ && \
+          pwd && \
           chmod +x gradlew && \
           ./gradlew build && \
           cd build/libs && \
