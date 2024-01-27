@@ -51,12 +51,12 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
           ssh -v root@158.220.113.254 "\
-          echo "MySecret1: ${{ secrets.DB_NAME }}"
-          echo "MySecret2: ${{ secrets.SERVER_IP }}"
           export DB_USERNAME=${DB_USERNAME} && \
           export DB_PASSWORD=${DB_PASSWORD} && \
           export DB_NAME=${DB_NAME} && \
           export SERVER_IP=${SERVER_IP} && \
+          echo "DB_USERNAME: $DB_USERNAME" && \
+          echo "DB_PASSWORD: $DB_PASSWORD" && \
           mkdir -p paypro-android-backend2 && \
           cd paypro-android-backend2 && \
           git init && \
