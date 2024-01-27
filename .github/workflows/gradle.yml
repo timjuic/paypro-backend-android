@@ -61,7 +61,6 @@ jobs:
           cd paypro-android-backend && \
           chmod +x gradlew && \
           ./gradlew build && \
-          fuser -k 8086/tcp && \
           cd build/libs && \
           nohup java -jar paypro-android-backend-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
         env:
