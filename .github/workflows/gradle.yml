@@ -51,7 +51,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
           ssh root@158.220.113.254 "\
-          fuser -k 8086/tcp && \
+          # fuser -k 8086/tcp && \
           mkdir -p paypro-android-backend2 && \
           cd paypro-android-backend2 && \
           git init && \
