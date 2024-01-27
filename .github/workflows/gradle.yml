@@ -50,7 +50,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-          ssh -v root@158.220.113.254 "\
+          ssh -vv root@158.220.113.254 "\
           export DB_USERNAME=${DB_USERNAME} && \
           export DB_PASSWORD=${DB_PASSWORD} && \
           export DB_NAME=${DB_NAME} && \
