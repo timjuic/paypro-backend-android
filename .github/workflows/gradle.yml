@@ -63,10 +63,6 @@ jobs:
           ls && \
           pwd && \
           cd paypro-android-backend/src/main/resources && \
-          echo 'DB.USERNAME=${{ secrets.DB_USERNAME }}' > secrets.properties && \
-          echo 'DB.PASSWORD=${{ secrets.DB_PASSWORD }}' >> secrets.properties && \
-          echo 'DB.NAME=${{ secrets.DB_NAME }}' >> secrets.properties && \
-          echo 'SERVER.IP=${{ secrets.SERVER_IP }}' >> secrets.properties && \
           cd ../../../ && \
           pwd && \
           chmod +x gradlew && \
