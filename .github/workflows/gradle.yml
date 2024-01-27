@@ -51,6 +51,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
           ssh -v root@158.220.113.254 "\
+          export DB_USERNAME=${DB_USERNAME} && \
+          export DB_PASSWORD=${DB_PASSWORD} && \
+          export DB_NAME=${DB_NAME} && \
+          export SERVER_IP=${SERVER_IP} && \
           mkdir -p paypro-android-backend2 && \
           cd paypro-android-backend2 && \
           git init && \
@@ -65,3 +69,7 @@ jobs:
           nohup java -jar paypro-android-backend-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
