@@ -55,8 +55,6 @@ jobs:
           export DB_PASSWORD=${DB_PASSWORD} && \
           export DB_NAME=${DB_NAME} && \
           export SERVER_IP=${SERVER_IP} && \
-          echo "DB_USERNAME: $DB_USERNAME" && \
-          echo "DB_PASSWORD: $DB_PASSWORD" && \
           mkdir -p paypro-android-backend2 && \
           cd paypro-android-backend2 && \
           git init && \
@@ -65,6 +63,8 @@ jobs:
           ls && \
           pwd && \
           cd paypro-android-backend && \
+          echo "${{ secrets.DB_USERNAME }}" > db_username.txt
+          echo "${{ secrets.DB_PASSWORD }}" > db_password.txt
           chmod +x gradlew && \
           ./gradlew build && \
           cd build/libs && \
