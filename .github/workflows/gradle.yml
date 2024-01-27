@@ -53,7 +53,6 @@ jobs:
           ssh -v root@158.220.113.254 "\
           ls && \
           pwd && \
-          # fuser -k 8086/tcp && \
           mkdir -p paypro-android-backend2 && \
           cd paypro-android-backend2 && \
           git init && \
@@ -61,10 +60,11 @@ jobs:
           git pull origin develop && \
           ls && \
           pwd && \
-          cd paypro-android-backend &&\
+          cd paypro-android-backend && \
           chmod +x gradlew && \
           ./gradlew build && \
           cd build/libs && \
+          fuser -k 8086/tcp && \
           nohup java -jar paypro-android-backend-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
