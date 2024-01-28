@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,25 +40,29 @@ public class JwtService {
     }
 
     public JwtTokenInfo refreshJwtToken(RefreshTokenRequest refreshTokenRequest) {
-        String userEmail = extractUserName(refreshTokenRequest.getRefreshToken());
-        Optional<UserAccount> userAccountDB = userRepository.findByEmailAddress(userEmail);
+        try{
+            String userEmail = extractUserName(refreshTokenRequest.getRefreshToken());
+            Optional<UserAccount> userAccountDB = userRepository.findByEmailAddress(userEmail);
 
-        if(userAccountDB.isPresent()) {
-            UserAccount userAccount = userAccountDB.get();
+            if(userAccountDB.isPresent()) {
+                UserAccount userAccount = userAccountDB.get();
 
-            if(isTokenValid(refreshTokenRequest.getRefreshToken(), userAccount)) {
-                Date issuedAt = new Date();
+                if(isTokenValid(refreshTokenRequest.getRefreshToken(), userAccount)) {
+                    Date issuedAt = new Date();
 
-                JwtTokenInfo jwtToken = new JwtTokenInfo();
-                jwtToken.setAccess_token(buildJws(userAccount, issuedAt));
+                    JwtTokenInfo jwtToken = new JwtTokenInfo();
+                    jwtToken.setAccess_token(buildJws(userAccount, issuedAt));
 
-                JwtTokenInfo.RefreshToken refreshToken = createRefreshToken(userAccount, issuedAt);
-                refreshToken.setToken(buildRefresh(userAccount, issuedAt));
+                    JwtTokenInfo.RefreshToken refreshToken = createRefreshToken(userAccount, issuedAt);
+                    refreshToken.setToken(buildRefresh(userAccount, issuedAt));
 
-                jwtToken.setRefresh_token(refreshToken);
+                    jwtToken.setRefresh_token(refreshToken);
 
-                return jwtToken;
+                    return jwtToken;
+                }
             }
+        } catch (Exception ignored){
+
         }
 
         return null;
