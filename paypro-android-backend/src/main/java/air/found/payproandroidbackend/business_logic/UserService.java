@@ -77,7 +77,12 @@ public class UserService {
                 UserAccount newUser = new UserAccount();
                 newUser.setEmailAddress(payload.getEmail());
                 newUser.setFirstName((String) payload.get("given_name"));
-                newUser.setLastName((String) payload.get("family_name"));
+                if(payload.get("family_name") == null) {
+                    newUser.setLastName("");
+                }
+                else {
+                    newUser.setLastName((String) payload.get("family_name"));
+                }
                 newUser.setPassword("");
                 newUser.setIsGoogle(true);
                 userRepository.save(newUser);

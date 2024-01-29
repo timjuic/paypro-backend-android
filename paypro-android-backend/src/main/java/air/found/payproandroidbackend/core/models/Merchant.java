@@ -46,7 +46,7 @@ public class Merchant {
     @JoinColumn(name = "status_id")
     private Status status;
 
-    @OneToMany(mappedBy = "merchant")
+    @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL)
     private List<Terminal> terminals;
 
     @ManyToMany
