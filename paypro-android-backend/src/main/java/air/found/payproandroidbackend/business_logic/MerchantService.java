@@ -103,10 +103,6 @@ public class MerchantService {
             if (merchantsRepository.existsByMerchantName(merchant.getMerchantName())) {
                 return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
             }
-        } else {
-            if (merchantsRepository.existsByMerchantNameAndId(merchant.getMerchantName(), id)) {
-                return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
-            }
         }
         if (merchant.getAcceptedCards().isEmpty()) {
             return ServiceResult.failure(ApiError.ERR_ACCEPTED_CARDS_NOT_DEFINED);
