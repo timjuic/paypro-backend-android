@@ -100,11 +100,11 @@ public class MerchantService {
             return ServiceResult.failure(ApiError.ERR_INVALID_MERCHANT_NAME);
         }
         if(id == null) {
-            if (!merchantsRepository.existsByMerchantName(merchant.getMerchantName())) {
+            if (merchantsRepository.existsByMerchantName(merchant.getMerchantName())) {
                 return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
             }
         } else {
-            if (!merchantsRepository.existsByMerchantNameAndId(merchant.getMerchantName(), id)) {
+            if (merchantsRepository.existsByMerchantNameAndId(merchant.getMerchantName(), id)) {
                 return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
             }
         }
