@@ -99,7 +99,7 @@ public class MerchantService {
         if (isInvalidName(merchant.getMerchantName())) {
             return ServiceResult.failure(ApiError.ERR_INVALID_MERCHANT_NAME);
         }
-        if (merchantsRepository.existsByMerchantName(merchant.getMerchantName())) {
+        if (merchantsRepository.existsByMerchantNameAndId(merchant.getMerchantName(), merchant.getId())) {
             return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
         }
         if (merchant.getAcceptedCards().isEmpty()) {
