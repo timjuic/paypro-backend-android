@@ -50,18 +50,27 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-          ssh root@158.220.113.254 "\
+          ssh -v root@158.220.113.254 "\
           mkdir -p paypro-android-backend2 && \
           cd paypro-android-backend2 && \
           git init && \
-          git remote -v | grep -q 'origin' || git remote add origin https://github.com/timjuic/paypro-backend-android && \
+          (git remote -v | grep -q 'origin' && git remote set-url origin https://github.com/timjuic/paypro-backend-android || git remote add origin https://github.com/timjuic/paypro-backend-android) && \
           git pull origin develop && \
           ls && \
           pwd && \
-          cd paypro-android-backend &&\
+          cd paypro-android-backend/src/main/resources && \
+          echo \"DB.USERNAME=${DB_USERNAME}\" > secrets.properties && \
+          echo \"DB.PASSWORD=${DB_PASSWORD}\" >> secrets.properties && \
+          echo \"DB.NAME=${DB_NAME}\" >> secrets.properties && \
+          echo \"SERVER.IP=${SERVER_IP}\" >> secrets.properties &&
+          cd ../../../ && \
           chmod +x gradlew && \
           ./gradlew build && \
           cd build/libs && \
           nohup java -jar paypro-android-backend-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}

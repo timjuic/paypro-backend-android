@@ -49,7 +49,7 @@ public class MerchantService {
     }
 
     public ServiceResult<Merchant> saveMerchant(Merchant merchant, Integer userId) {
-        ServiceResult<Merchant> validationResult = validateMerchant(merchant);
+        ServiceResult<Merchant> validationResult = validateMerchant(merchant, null);
         if (!validationResult.isSuccess()) {
             return validationResult;
         }
@@ -74,7 +74,7 @@ public class MerchantService {
 
 
     public ServiceResult<Merchant> updateMerchant(Integer id, Merchant merchant) {
-        ServiceResult<Merchant> validationResult = validateMerchant(merchant);
+        ServiceResult<Merchant> validationResult = validateMerchant(merchant, id);
         if(!validationResult.isSuccess()) {
             return validationResult;
         }
@@ -95,12 +95,14 @@ public class MerchantService {
                 .orElseGet(() -> ServiceResult.failure(ApiError.ERR_MERCHANT_NOT_FOUND));
     }
 
-    private ServiceResult<Merchant> validateMerchant(Merchant merchant) {
+    private ServiceResult<Merchant> validateMerchant(Merchant merchant, Integer id) {
         if (isInvalidName(merchant.getMerchantName())) {
             return ServiceResult.failure(ApiError.ERR_INVALID_MERCHANT_NAME);
         }
-        if (merchantsRepository.existsByMerchantName(merchant.getMerchantName())) {
-            return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
+        if(id == null) {
+            if (merchantsRepository.existsByMerchantName(merchant.getMerchantName())) {
+                return ServiceResult.failure(ApiError.ERR_MERCHANT_ALREADY_EXISTS);
+            }
         }
         if (merchant.getAcceptedCards().isEmpty()) {
             return ServiceResult.failure(ApiError.ERR_ACCEPTED_CARDS_NOT_DEFINED);

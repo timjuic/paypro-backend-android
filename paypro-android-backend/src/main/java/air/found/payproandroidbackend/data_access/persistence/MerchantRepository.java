@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MerchantRepository extends JpaRepository<Merchant, Integer> {
+    boolean existsByMerchantNameAndId(String name, int id);
     boolean existsByMerchantName(String name);
 
     @Query("SELECT DISTINCT m FROM Merchant m " +
